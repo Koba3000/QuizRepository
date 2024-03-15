@@ -11,7 +11,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.quiz.view.Screens
 
+@Composable
+fun StartScreen(
+    navController: NavController
+) {
+    NavigationButton(navController = navController, "let's play quiz")
+}
+
+@Composable
+fun NavigationButton(navController: NavController, text: String) {
+    Button(onClick = {
+        navController.navigate(Screens.CategoryScreen.route)
+    }) {
+        Text(text = text)
+    }
+}
+
+
+//
 @Composable
 fun SimpleButton(text: String){
     Button(
