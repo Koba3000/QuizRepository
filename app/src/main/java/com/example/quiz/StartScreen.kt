@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 
@@ -18,39 +20,21 @@ import com.example.quiz.view.Screens
 fun StartScreen(
     navController: NavController
 ) {
-    NavigationButton(navController = navController, "let's play quiz")
+    NavigationButton(navController = navController, Screens.CategoryScreen.route, "play quiz app")
 }
 
 @Composable
-fun NavigationButton(navController: NavController, text: String) {
-    Button(onClick = {
-        navController.navigate(Screens.CategoryScreen.route)
-    }) {
-        Text(text = text)
-    }
-}
-
-
-//
-@Composable
-fun SimpleButton(text: String){
+fun NavigationButton(navController: NavController, route: String, text: String) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
             .padding(20.dp),
         onClick = {
-            Log.d("SimpleButton", "Button Clicked")
-        },
-        shape = RectangleShape
-    ) {
-        Text(text = text)
+        navController.navigate(route)
+    }) {
+        Text(text = text,
+            style = TextStyle(fontSize = 25.sp)
+        )
     }
 }
-
-@Preview
-@Composable
-fun SimpleButtonPreview(){
-    SimpleButton("Simple button")
-}
-
