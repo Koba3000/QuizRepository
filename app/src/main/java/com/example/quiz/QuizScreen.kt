@@ -47,10 +47,10 @@ fun QuizScreen(
             Answer("a4 (A)",true))
         ),
         Question("question 3 (A)", listOf(
-            Answer("a1 (a)", false),
-            Answer("a1 (A)",true),
-            Answer("a2 (A)",false),
-            Answer("a3 (A)",false)
+            Answer("a1 (A)", false),
+            Answer("a2 (A)",true),
+            Answer("a3 (A)",false),
+            Answer("a4 (A)",false)
         ))
     ))
     val questionsCategory2 = Category(listOf(
@@ -103,6 +103,9 @@ fun QuizScreen(
         ?.toIntOrNull() ?: 0
 
     var currentQuestion by remember { mutableIntStateOf(0) }
+    var correctAnswers by remember { mutableStateOf(0) }
+    var showCorrectAnswers by remember { mutableStateOf(false) }
+    var showFilledForm by remember { mutableStateOf(false) }
 
     Log.d("EntryScreen", "currentRoute: $categoryId")
     Log.d("current category questions: \n", categories[categoryId].category[0].question)
@@ -112,9 +115,12 @@ fun QuizScreen(
         QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
 
         val answerStates = remember {
-            categories[categoryId].category.map {
-                it.answers.map {
-                    mutableStateOf(false) } } }
+            categories.flatMap { category ->
+                category.category.map { question ->
+                    question.answers.map { mutableStateOf(false) }
+                }
+            }
+        }
 
         for (i in 0 until categories[categoryId].category[currentQuestion].answers.size) {
             QuizAnswer(
@@ -154,7 +160,30 @@ fun QuizScreen(
             }
             Text(text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
                 style = TextStyle(fontSize = 20.sp))
+
+            Button(
+                modifier = Modifier
+                    .height(100.dp)
+                    .padding(10.dp),
+                onClick = {
+                    correctAnswers = calculateCorrectAnswers(categories[categoryId], answerStates)
+                    showCorrectAnswers = true
+                    showFilledForm = true
+                    Log.d("Correct Answers", correctAnswers.toString())
+
+                },
+                shape = RectangleShape
+            ) {
+                Text(text = "send form")
+            }
         }
+        if (showCorrectAnswers) {
+            Text(text = "Correct Answers: $correctAnswers")
+        }
+        if (showFilledForm) {
+            DisplayFilledForm(categories[categoryId], answerStates)
+        }
+
         Row {
             NavigationButton(
                 navController = navController,
@@ -182,10 +211,36 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
             onCheckedChange = { isSelected.value = it },
             colors = CheckboxDefaults.colors(
                 checkmarkColor = Color.White,
-                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
+//                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
+                checkedColor = Color.Gray,
                 uncheckedColor = Color.Gray
             )
         )
         Text(text = quizAnswer)
     }
 }
+
+fun calculateCorrectAnswers(category: Category, answerStates: List<List<MutableState<Boolean>>>): Int {
+    var correctAnswers = 0
+    for (questionIndex in category.category.indices) {
+        for (answerIndex in category.category[questionIndex].answers.indices) {
+            if (answerStates[questionIndex][answerIndex].value == category.category[questionIndex].answers[answerIndex].isCorrect) {
+                correctAnswers++
+            }
+        }
+    }
+    return correctAnswers
+}
+
+@Composable
+fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
+    for (questionIndex in category.category.indices) {
+        Text(text = "Question: " + category.category[questionIndex].question)
+        for (answerIndex in category.category[questionIndex].answers.indices) {
+            Text(text = "Answer: " + category.category[questionIndex].answers[answerIndex].answer)
+            Text(text = "User answer: " + if (userAnswers[questionIndex][answerIndex].value) "TRUE" else "FALSE")
+            Text(text = "Correct answer: " + if (category.category[questionIndex].answers[answerIndex].isCorrect) "TRUE" else "FALSE")
+        }
+    }
+}
+

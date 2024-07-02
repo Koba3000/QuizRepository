@@ -20,7 +20,11 @@ import com.example.quiz.view.Screens
 fun StartScreen(
     navController: NavController
 ) {
-    NavigationButton(navController = navController, Screens.CategoryScreen.route, "play quiz app")
+    NavigationButton(
+        navController = navController,
+        route = Screens.CategoryScreen.route,
+        text = "play quiz app"
+    )
 }
 
 @Composable

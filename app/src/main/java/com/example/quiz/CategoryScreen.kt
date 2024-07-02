@@ -16,7 +16,6 @@ fun CategoryScreen(
     CategoryButtons(navController)
 }
 
-
 @Composable
 fun CategoryButtons(navController: NavController){
     Column {
