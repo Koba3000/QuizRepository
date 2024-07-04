@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.quiz.AnswersScreen
 import com.example.quiz.CategoryScreen
 import com.example.quiz.QuizScreen
 import com.example.quiz.StartScreen
@@ -27,6 +28,9 @@ fun Navigation() {
             })
         ){
             QuizScreen(navController)
+        }
+        composable(Screens.AnswersScreen.route) {
+            AnswersScreen(navController)
         }
     }
 }

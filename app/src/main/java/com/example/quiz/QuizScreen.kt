@@ -3,6 +3,7 @@ package com.example.quiz
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -57,40 +58,70 @@ fun QuizScreen(
         Question("Question 1 (B)", listOf(
             Answer("a1(B)", true),
             Answer("a2(B)", false),
-            Answer("a2(B)", false),
-            Answer("a2(B)", false))
+            Answer("a3(B)", false),
+            Answer("a4(B)", false))
         ),
         Question("Question 2 (B)", listOf(
             Answer("a1(B)", true),
             Answer("a2(B)", false),
+            Answer("a3(B)", false),
+            Answer("a4(B)", false))
+        ),
+        Question("Question 3 (B)", listOf(
+            Answer("a1(B)", true),
             Answer("a2(B)", false),
-            Answer("a2(B)", false))
-        )
+            Answer("a3(B)", false),
+            Answer("a4(B)", false))
+        ),
+        Question("Question 4 (B)", listOf(
+            Answer("a1(B)", true),
+            Answer("a2(B)", false),
+            Answer("a3(B)", false),
+            Answer("a4(B)", false))
+        ),
+        Question("Question 5 (B)", listOf(
+            Answer("a1(B)", true),
+            Answer("a2(B)", false),
+            Answer("a3(B)", false),
+            Answer("a4(B)", false))
+        ),
     ))
     val questionsCategory3 = Category(listOf(
         Question("Question 1 (C)", listOf(
             Answer("a1 (C)", true),
             Answer("a2 (C)", false),
-            Answer("a1 (C)", false),
-            Answer("a2 (C)", false)
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
         )),
         Question("Question 2 (C)", listOf(
             Answer("a1 (C)", true),
             Answer("a2 (C)", false),
-            Answer("a1 (C)", false),
-            Answer("a2 (C)", false)
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
         )),
         Question("Question 3 (C)", listOf(
             Answer("a1 (C)", true),
             Answer("a2 (C)", false),
-            Answer("a1 (C)", false),
-            Answer("a2 (C)", false)
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
         )),
         Question("Question 4 (C)", listOf(
             Answer("a1 (C)", true),
             Answer("a2 (C)", false),
-            Answer("a1 (C)", false),
-            Answer("a2 (C)", false)
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
+        )),
+        Question("Question 5 (C)", listOf(
+            Answer("a1 (C)", true),
+            Answer("a2 (C)", false),
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
+        )),
+        Question("Question 6 (C)", listOf(
+            Answer("a1 (C)", true),
+            Answer("a2 (C)", false),
+            Answer("a3 (C)", false),
+            Answer("a4 (C)", false)
         ))
     ))
 
@@ -103,15 +134,11 @@ fun QuizScreen(
         ?.toIntOrNull() ?: 0
 
     var currentQuestion by remember { mutableIntStateOf(0) }
-    var correctAnswers by remember { mutableStateOf(0) }
-    var showCorrectAnswers by remember { mutableStateOf(false) }
-    var showFilledForm by remember { mutableStateOf(false) }
 
-    Log.d("EntryScreen", "currentRoute: $categoryId")
-    Log.d("current category questions: \n", categories[categoryId].category[0].question)
+    Log.d("categoryId", "categoryId: $categoryId")
+    Log.d("currentQuestion", "currentQuestion: $currentQuestion")
 
     Column {
-
         QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
 
         val answerStates = remember {
@@ -158,38 +185,45 @@ fun QuizScreen(
             ) {
                 Text(text = ">>>")
             }
-            Text(text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
-                style = TextStyle(fontSize = 20.sp))
+            Log.d("categoryId", categoryId.toString())
+            Log.d("current cat size", categories[categoryId].category.size.toString())
+            Text(
+                text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
+                style = TextStyle(fontSize = 20.sp)
+            )
 
             Button(
                 modifier = Modifier
                     .height(100.dp)
                     .padding(10.dp),
                 onClick = {
-                    correctAnswers = calculateCorrectAnswers(categories[categoryId], answerStates)
-                    showCorrectAnswers = true
-                    showFilledForm = true
-                    Log.d("Correct Answers", correctAnswers.toString())
-
+                    AppData.quizAttempt = QuizAttempt().apply {
+                        this.categories = categories[categoryId]
+                        this.userAnswers = answerStates
+                    }
+                    currentQuestion = 0
+                    navController.navigate(Screens.AnswersScreen.route)
                 },
                 shape = RectangleShape
             ) {
                 Text(text = "send form")
             }
         }
-        if (showCorrectAnswers) {
-            Text(text = "Correct Answers: $correctAnswers")
-        }
-        if (showFilledForm) {
-            DisplayFilledForm(categories[categoryId], answerStates)
-        }
-
         Row {
-            NavigationButton(
-                navController = navController,
-                route = Screens.CategoryScreen.route,
-                text = "back to categories"
-            )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .padding(20.dp),
+                onClick = {
+                    currentQuestion = 0
+                    navController.navigate(Screens.CategoryScreen.route)
+                },
+                shape = RectangleShape
+            ) {
+                Text(text = "back to categories")
+            }
+
         }
     }
 }
@@ -211,8 +245,8 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
             onCheckedChange = { isSelected.value = it },
             colors = CheckboxDefaults.colors(
                 checkmarkColor = Color.White,
-//                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
-                checkedColor = Color.Gray,
+                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
+//                checkedColor = Color.Gray,
                 uncheckedColor = Color.Gray
             )
         )
@@ -220,27 +254,4 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
     }
 }
 
-fun calculateCorrectAnswers(category: Category, answerStates: List<List<MutableState<Boolean>>>): Int {
-    var correctAnswers = 0
-    for (questionIndex in category.category.indices) {
-        for (answerIndex in category.category[questionIndex].answers.indices) {
-            if (answerStates[questionIndex][answerIndex].value == category.category[questionIndex].answers[answerIndex].isCorrect) {
-                correctAnswers++
-            }
-        }
-    }
-    return correctAnswers
-}
-
-@Composable
-fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
-    for (questionIndex in category.category.indices) {
-        Text(text = "Question: " + category.category[questionIndex].question)
-        for (answerIndex in category.category[questionIndex].answers.indices) {
-            Text(text = "Answer: " + category.category[questionIndex].answers[answerIndex].answer)
-            Text(text = "User answer: " + if (userAnswers[questionIndex][answerIndex].value) "TRUE" else "FALSE")
-            Text(text = "Correct answer: " + if (category.category[questionIndex].answers[answerIndex].isCorrect) "TRUE" else "FALSE")
-        }
-    }
-}
 

@@ -26,7 +26,11 @@ fun CategoryButtons(navController: NavController){
                 text = "Category $category",
                 buttonId = i.toString())
         }
-        NavigationButton(navController,Screens.StartScreen.route,"go back to start screen")
+        NavigationButton(
+            navController = navController,
+            route = Screens.StartScreen.route,
+            text = "go back to start screen"
+        )
     }
 }
 
