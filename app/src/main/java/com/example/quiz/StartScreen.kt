@@ -32,7 +32,7 @@ fun NavigationButton(
     navController: NavController,
     route: String,
     text: String
-) {
+){
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,36 +41,9 @@ fun NavigationButton(
         onClick = {
         navController.navigate(route)
     }) {
-        Text(text = text,
+        Text(
+            text = text,
             style = TextStyle(fontSize = 25.sp)
         )
     }
 }
-
-//@Composable
-//fun StartScreen(navController: NavController) {
-//    NavigationButton(
-//        navController = navController,
-//        route = Screens.CategoryScreen.route,
-//        text = "play quiz app",
-//        onClick = { navController.navigate(Screens.CategoryScreen.route) }
-//    )
-//}
-//
-//@Composable
-//fun NavigationButton(
-//    navController: NavController,
-//    route: String,
-//    text: String,
-//    onClick: () -> Unit
-//) {
-//    Button(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(100.dp)
-//            .padding(20.dp),
-//        onClick = onClick
-//    ) {
-//        Text(text = text, style = TextStyle(fontSize = 25.sp))
-//    }
-//}

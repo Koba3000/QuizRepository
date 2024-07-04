@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
+
 @Composable
 fun QuizScreen(
     navController: NavController
@@ -135,8 +136,7 @@ fun QuizScreen(
 
     var currentQuestion by remember { mutableIntStateOf(0) }
 
-    Log.d("categoryId", "categoryId: $categoryId")
-    Log.d("currentQuestion", "currentQuestion: $currentQuestion")
+
 
     Column {
         QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
@@ -253,5 +253,6 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
         Text(text = quizAnswer)
     }
 }
+
 
 
