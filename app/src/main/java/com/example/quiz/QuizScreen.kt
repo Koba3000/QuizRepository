@@ -136,8 +136,6 @@ fun QuizScreen(
 
     var currentQuestion by remember { mutableIntStateOf(0) }
 
-
-
     Column {
         QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
 
@@ -185,8 +183,6 @@ fun QuizScreen(
             ) {
                 Text(text = ">>>")
             }
-            Log.d("categoryId", categoryId.toString())
-            Log.d("current cat size", categories[categoryId].category.size.toString())
             Text(
                 text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
                 style = TextStyle(fontSize = 20.sp)
