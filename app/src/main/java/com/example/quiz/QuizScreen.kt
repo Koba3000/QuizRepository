@@ -1,6 +1,5 @@
 package com.example.quiz
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,13 +41,17 @@ fun QuizScreen(
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
+    var currentQuestion by remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("QUIZ APP") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        currentQuestion = 0
+                        navController.navigate(Screens.CategoryScreen.route)
+                    }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
@@ -195,7 +198,7 @@ fun QuizScreen(
                 ?.getString("categoryId")
                 ?.toIntOrNull() ?: 0
 
-            var currentQuestion by remember { mutableIntStateOf(0) }
+//            var currentQuestion by remember { mutableIntStateOf(0) }
 
             Column {
                 QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
@@ -266,21 +269,21 @@ fun QuizScreen(
                         Text(text = "send form")
                     }
                 }
-                Row {
-                    Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
-                            .padding(20.dp),
-                        onClick = {
-                            currentQuestion = 0
-                            navController.navigate(Screens.CategoryScreen.route)
-                        },
-                        shape = RectangleShape
-                    ) {
-                        Text(text = "back to categories")
-                    }
-                }
+//                Row {
+//                    Button(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(100.dp)
+//                            .padding(20.dp),
+//                        onClick = {
+//                            currentQuestion = 0
+//                            navController.navigate(Screens.CategoryScreen.route)
+//                        },
+//                        shape = RectangleShape
+//                    ) {
+//                        Text(text = "back to categories")
+//                    }
+//                }
             }
         }
     }

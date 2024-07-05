@@ -52,21 +52,11 @@ fun AnswersScreen(
                 Column {
                     Text(text = "Correct Answers: $totalPoints")
                     DisplayFilledForm(category = category, userAnswers = answerStates)
-                    NavigationButton(
-                        navController = navController,
-                        route = Screens.CategoryScreen.route,
-                        text = "back to categories"
-                    )
                 }
             } else {
                 Column {
                     Log.d("AnswersScreen", "Error: No data available. Please try again.")
                     Text(text = "Error: No data available. Please try again.")
-                    NavigationButton(
-                        navController = navController,
-                        route = Screens.CategoryScreen.route,
-                        text = "back to categories"
-                    )
                 }
             }
         }

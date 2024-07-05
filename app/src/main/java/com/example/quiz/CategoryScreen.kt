@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 import androidx.compose.ui.Modifier
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryScreen(
@@ -27,7 +28,7 @@ fun CategoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Categories") },
+                title = { Text("QUIZ APP") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -52,11 +53,6 @@ fun CategoryButtons(navController: NavController, paddingValues: PaddingValues){
                 text = "Category $category",
                 buttonId = i.toString())
         }
-        NavigationButton(
-            navController = navController,
-            route = Screens.StartScreen.route,
-            text = "go back to start screen"
-        )
     }
 }
 
