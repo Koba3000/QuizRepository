@@ -5,25 +5,39 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.quiz.AppData
-import com.example.quiz.Category
 import com.example.quiz.view.Screens
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnswersScreen(
     navController: NavController
 ){
     val scrollState = rememberScrollState()
 
-    Scaffold { paddingValues ->
+    Scaffold (
+        topBar = {
+            TopAppBar(
+                title = { Text("QUIZ APP") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ){ paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -35,7 +49,6 @@ fun AnswersScreen(
             if (category != null && answerStates != null) {
                 val totalPoints =
                     calculateTotalPoints(category = category, answerStates = answerStates)
-
                 Column {
                     Text(text = "Correct Answers: $totalPoints")
                     DisplayFilledForm(category = category, userAnswers = answerStates)
@@ -45,7 +58,6 @@ fun AnswersScreen(
                         text = "back to categories"
                     )
                 }
-
             } else {
                 Column {
                     Log.d("AnswersScreen", "Error: No data available. Please try again.")
