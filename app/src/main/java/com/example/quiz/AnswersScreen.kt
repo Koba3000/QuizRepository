@@ -63,7 +63,6 @@ fun AnswersScreen(
     }
 }
 
-
 @Composable
 fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
     val questionPoints = calculateQuestionPoints(category, userAnswers)

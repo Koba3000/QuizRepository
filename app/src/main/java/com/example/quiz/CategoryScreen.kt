@@ -30,7 +30,7 @@ fun CategoryScreen(
             TopAppBar(
                 title = { Text("QUIZ APP") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
