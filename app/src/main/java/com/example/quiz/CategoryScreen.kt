@@ -18,10 +18,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.quiz.ApiConnection.CategoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryScreen(
+    viewModel: CategoryViewModel = hiltViewModel(),
     navController: NavController
 ){
 
