@@ -1,6 +1,9 @@
 package com.example.quiz.ApiConnection
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,8 +16,8 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
     private val repository: CategoryRepository
 ) : ViewModel() {
-    private val _categories = MutableStateFlow<List<CategoryDto>>(emptyList())
-    val categories: StateFlow<List<CategoryDto>> = _categories
+    var isLoading by mutableStateOf(true)
+    var categories by mutableStateOf(emptyList<CategoryDto>())
 
     init {
         fetchCategories()
@@ -23,13 +26,13 @@ class CategoryViewModel @Inject constructor(
     private fun fetchCategories() {
         viewModelScope.launch {
             try {
-                _categories.value = repository.getCategories()
+                categories = repository.getCategories()
 
                 Log.d("CategoryViewModel", "Categories fetched successfully")
-                Log.d("CategoryViewModel", _categories.value.toString())
             } catch (e: Exception) {
                 Log.e("CategoryViewModel", "Failed to fetch categories", e)
             }
+            isLoading = false
         }
     }
 }

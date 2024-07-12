@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.ApiConnection.CategoryViewModel
 
@@ -40,21 +42,24 @@ fun CategoryScreen(
             )
         }
     ) { paddingValues ->
-        CategoryButtons(navController = navController, paddingValues = paddingValues)
-    }
-}
+        Column (
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            if (viewModel.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
 
-@Composable
-fun CategoryButtons(navController: NavController, paddingValues: PaddingValues){
-    Column(modifier = Modifier
-        .padding(paddingValues)
-    ){
-        for (i in 0 .. 2){
-            val category = i + 1
-            CategoryNavigationButton(
-                navController = navController,
-                text = "Category $category",
-                buttonId = i.toString())
+            viewModel.categories.forEach {
+                CategoryNavigationButton(
+                    navController = navController,
+                    text = it.name,
+                    buttonId = it.id.toString()
+                )
+            }
         }
     }
 }
