@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.quiz.view.Screens
+import com.example.quiz.model.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

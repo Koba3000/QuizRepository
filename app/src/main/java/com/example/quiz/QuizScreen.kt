@@ -2,7 +2,6 @@ package com.example.quiz
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import com.example.quiz.model.Answer
+import com.example.quiz.model.Category
+import com.example.quiz.model.Question
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
