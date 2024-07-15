@@ -1,5 +1,6 @@
 package com.example.quiz
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
@@ -31,8 +32,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.quiz.ApiConnection.CategoryDto
+import com.example.quiz.ApiConnection.CategoryViewModel
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
@@ -40,10 +45,13 @@ import com.example.quiz.model.Question
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizScreen(
+    viewModel: CategoryViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
     var currentQuestion by remember { mutableIntStateOf(0) }
+    val answerStates = viewModel.answerStates.value
+
 
     Scaffold(
         topBar = {
@@ -192,7 +200,7 @@ fun QuizScreen(
                 )
             )
 
-            val categories = listOf(questionsCategory1, questionsCategory2, questionsCategory3)
+//            val categories = listOf(questionsCategory1, questionsCategory2, questionsCategory3)
 
             val categoryId = navController
                 .currentBackStackEntry
@@ -200,24 +208,26 @@ fun QuizScreen(
                 ?.getString("categoryId")
                 ?.toIntOrNull() ?: 0
 
-//            var currentQuestion by remember { mutableIntStateOf(0) }
-
             Column {
-                QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
 
-                val answerStates = remember {
-                    categories.flatMap { category ->
-                        category.category.map { question ->
-                            question.answers.map { mutableStateOf(false) }
-                        }
-                    }
+                val category = viewModel.categories.firstOrNull { it.id == categoryId }
+
+                category?.questions?.forEach { question ->
+                    Log.d("QuizScreen", "Question: ${question.name}")
+                    question.answers?.forEach { answer ->
+                        Log.d("QuizScreen", "Answer: ${answer.answer}, Is Correct: ${answer.isCorrect}")
+                    } ?: Log.d("QuizScreen", "No answers available for this question")
+                } ?: Log.d("QuizScreen", "No questions available for this category")
+
+                if (category != null) {
+                    QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
                 }
 
-                for (i in 0 until categories[categoryId].category[currentQuestion].answers.size) {
+                category?.questions?.getOrNull(currentQuestion)?.answers?.forEachIndexed { index, answer ->
                     QuizAnswer(
-                        quizAnswer = categories[categoryId].category[currentQuestion].answers[i].answer,
-                        isCorrectAnswer = categories[categoryId].category[currentQuestion].answers[i].isCorrect,
-                        isSelected = answerStates[currentQuestion][i]
+                        quizAnswer = answer.answer,
+                        isCorrectAnswer = answer.isCorrect,
+                        isSelected = answerStates[currentQuestion][index]
                     )
                 }
 
@@ -241,7 +251,7 @@ fun QuizScreen(
                             .height(100.dp)
                             .padding(10.dp),
                         onClick = {
-                            if (currentQuestion < categories[categoryId].category.size - 1) {
+                            if (currentQuestion < (category?.questions?.size ?: 0) - 1) {
                                 currentQuestion++
                             }
                         },
@@ -250,7 +260,7 @@ fun QuizScreen(
                         Text(text = ">>>")
                     }
                     Text(
-                        text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
+                        text = (currentQuestion + 1).toString() + "/" + (category?.questions?.size ?: 0),
                         style = TextStyle(fontSize = 20.sp)
                     )
 
@@ -259,8 +269,10 @@ fun QuizScreen(
                             .height(100.dp)
                             .padding(10.dp),
                         onClick = {
-                            AppData.quizAttempt = QuizAttempt().apply {
-                                this.categories = categories[categoryId]
+                            val categoryDto: CategoryDto? = category// Obtain your CategoryDto object
+                            val _category: Category = convertDtoToCategory(categoryDto)
+                            AppData.quizAttempt = QuizAttempt(categoryDto).apply {
+                                this.categories = _category
                                 this.userAnswers = answerStates
                             }
                             currentQuestion = 0
@@ -271,19 +283,76 @@ fun QuizScreen(
                         Text(text = "send form")
                     }
                 }
+
+
+
+//                  OLD VERSION
+//                QuizQuestion(quizQuestion = categories[categoryId].category[currentQuestion].question)
+//
+//                val answerStates = remember {
+//                    categories.flatMap { category ->
+//                        category.category.map { question ->
+//                            question.answers.map { mutableStateOf(false) }
+//                        }
+//                    }
+//                }
+//
+//               { for (i in 0 until categories[categoryId].category[currentQuestion].answers.size)
+//                    QuizAnswer(
+//                        quizAnswer = categories[categoryId].category[currentQuestion].answers[i].answer,
+//                        isCorrectAnswer = categories[categoryId].category[currentQuestion].answers[i].isCorrect,
+//                        isSelected = answerStates[currentQuestion][i]
+//                    )
+//                }
+//
 //                Row {
 //                    Button(
 //                        modifier = Modifier
-//                            .fillMaxWidth()
 //                            .height(100.dp)
-//                            .padding(20.dp),
+//                            .padding(10.dp),
 //                        onClick = {
-//                            currentQuestion = 0
-//                            navController.navigate(Screens.CategoryScreen.route)
+//                            if (currentQuestion > 0) {
+//                                currentQuestion--
+//                            }
 //                        },
 //                        shape = RectangleShape
 //                    ) {
-//                        Text(text = "back to categories")
+//                        Text(text = "<<<")
+//                    }
+//
+//                    Button(
+//                        modifier = Modifier
+//                            .height(100.dp)
+//                            .padding(10.dp),
+//                        onClick = {
+//                            if (currentQuestion < categories[categoryId].category.size - 1) {
+//                                currentQuestion++
+//                            }
+//                        },
+//                        shape = RectangleShape
+//                    ) {
+//                        Text(text = ">>>")
+//                    }
+//                    Text(
+//                        text = (currentQuestion + 1).toString() + "/" + categories[categoryId].category.size,
+//                        style = TextStyle(fontSize = 20.sp)
+//                    )
+//
+//                    Button(
+//                        modifier = Modifier
+//                            .height(100.dp)
+//                            .padding(10.dp),
+//                        onClick = {
+//                            AppData.quizAttempt = QuizAttempt().apply {
+//                                this.categories = categories[categoryId]
+//                                this.userAnswers = answerStates
+//                            }
+//                            currentQuestion = 0
+//                            navController.navigate(Screens.AnswersScreen.route)
+//                        },
+//                        shape = RectangleShape
+//                    ) {
+//                        Text(text = "send form")
 //                    }
 //                }
             }
@@ -308,13 +377,29 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
             onCheckedChange = { isSelected.value = it },
             colors = CheckboxDefaults.colors(
                 checkmarkColor = Color.White,
-//                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
-                checkedColor = Color.Gray,
+                checkedColor = if (isCorrectAnswer) Color.Green else Color.Red,
+//                checkedColor = Color.Gray,
                 uncheckedColor = Color.Gray
             )
         )
         Text(text = quizAnswer)
     }
+}
+
+fun convertDtoToCategory(categoryDto: CategoryDto?): Category {
+    if (categoryDto == null) {
+        return Category(listOf())
+    }
+    return Category(
+        category = categoryDto.questions?.map { questionDto ->
+            Question(
+                name = questionDto.name,
+                answers = questionDto.answers?.map { answerDto ->
+                    Answer(answerDto.answer, answerDto.isCorrect)
+                } ?: listOf()
+            )
+        } ?: listOf()
+    )
 }
 
 

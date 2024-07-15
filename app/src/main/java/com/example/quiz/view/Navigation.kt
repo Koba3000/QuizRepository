@@ -32,7 +32,7 @@ fun Navigation() {
                 defaultValue = "0"
             })
         ){
-            QuizScreen(navController)
+            QuizScreen(navController=navController)
         }
         composable(Screens.AnswersScreen.route) {
             AnswersScreen(navController)

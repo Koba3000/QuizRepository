@@ -67,7 +67,7 @@ fun AnswersScreen(
 fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
     val questionPoints = calculateQuestionPoints(category, userAnswers)
     for (questionIndex in category.category.indices) {
-        Text(text = "Question: " + category.category[questionIndex].question +" " + questionPoints[questionIndex] + " points")
+        Text(text = "Question: " + category.category[questionIndex].name +" " + questionPoints[questionIndex] + " points")
         for (answerIndex in category.category[questionIndex].answers.indices) {
             Text(text = "Answer: " + category.category[questionIndex].answers[answerIndex].answer)
             Text(text = "User's answer: " + if (userAnswers[questionIndex][answerIndex].value) "TRUE" else "FALSE")

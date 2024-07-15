@@ -1,6 +1,7 @@
 package com.example.quiz.ApiConnection
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,6 +19,8 @@ class CategoryViewModel @Inject constructor(
 ) : ViewModel() {
     var isLoading by mutableStateOf(true)
     var categories by mutableStateOf(emptyList<CategoryDto>())
+    var answerStates = mutableStateOf(listOf<List<MutableState<Boolean>>>())
+
 
     init {
         fetchCategories()
@@ -25,14 +28,34 @@ class CategoryViewModel @Inject constructor(
 
     private fun fetchCategories() {
         viewModelScope.launch {
-            try {
-                categories = repository.getCategories()
-
-                Log.d("CategoryViewModel", "Categories fetched successfully")
-            } catch (e: Exception) {
-                Log.e("CategoryViewModel", "Failed to fetch categories", e)
+            viewModelScope.launch {
+                try {
+                    categories = repository.getCategories()
+                    // Initialize answerStates based on fetched categories
+                    answerStates.value = categories.flatMap { category ->
+                        category.questions?.map { question ->
+                            question.answers?.map { mutableStateOf(false) } ?: emptyList()
+                        } ?: emptyList()
+                    }
+                    Log.d("CategoryViewModel", "Categories fetched successfully")
+                } catch (e: Exception) {
+                    Log.e("CategoryViewModel", "Failed to fetch categories", e)
+                }
+                isLoading = false
             }
-            isLoading = false
         }
     }
+
+//    private fun fetchCategories() {
+//        viewModelScope.launch {
+//            try {
+//                categories = repository.getCategories()
+//
+//                Log.d("CategoryViewModel", "Categories fetched successfully")
+//            } catch (e: Exception) {
+//                Log.e("CategoryViewModel", "Failed to fetch categories", e)
+//            }
+//            isLoading = false
+//        }
+//    }
 }
