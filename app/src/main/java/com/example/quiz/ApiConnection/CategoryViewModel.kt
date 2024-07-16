@@ -7,10 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.quiz.model.Category
+import com.example.quiz.model.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +20,6 @@ class CategoryViewModel @Inject constructor(
     var isLoading by mutableStateOf(true)
     var categories by mutableStateOf(emptyList<CategoryDto>())
     var answerStates = mutableStateOf(listOf<List<MutableState<Boolean>>>())
-
 
     init {
         fetchCategories()
@@ -46,16 +45,27 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-//    private fun fetchCategories() {
-//        viewModelScope.launch {
-//            try {
-//                categories = repository.getCategories()
-//
-//                Log.d("CategoryViewModel", "Categories fetched successfully")
-//            } catch (e: Exception) {
-//                Log.e("CategoryViewModel", "Failed to fetch categories", e)
-//            }
-//            isLoading = false
-//        }
-//    }
+    fun addNewCategory(categoryName: String, questions: List<Question>) {
+        viewModelScope.launch {
+            try {
+                // Convert List<Question> to List<QuestionDto>
+                val questionDtos = questions.map { question ->
+                    QuestionDto(
+                        name = question.name,
+                        answers = question.answers.map { answer ->
+                            AnswerDto(answer = answer.answer, isCorrect = answer.isCorrect)
+                        }
+                    )
+                }
+                // Create CategoryDto
+                val categoryDto = CategoryDto(name = categoryName, questions = questionDtos)
+                // Use repository to send the CategoryDto
+                repository.createCategory(categoryDto)
+                // Handle success (e.g., update UI state)
+                Log.d("CategoryViewModel", "Category created successfully")
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+    }
 }

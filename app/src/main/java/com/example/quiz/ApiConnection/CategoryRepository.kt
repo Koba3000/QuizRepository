@@ -1,6 +1,5 @@
 package com.example.quiz.ApiConnection
 
-
 class CategoryRepository(private val apiService: ApiService): ApiService {
 
     override suspend fun createCategory(category: CategoryDto): CategoryDto {

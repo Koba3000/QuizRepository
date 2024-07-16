@@ -1,6 +1,6 @@
 package com.example.quiz.model
 
 data class Question (
-    val name: String,
+    var name: String,
     val answers: List<Answer>
 )

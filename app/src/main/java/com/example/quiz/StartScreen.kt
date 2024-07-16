@@ -37,6 +37,11 @@ fun StartScreen(
                 route = Screens.CategoryScreen.route,
                 text = "play quiz app"
             )
+            NavigationButton(
+                navController = navController,
+                route = Screens.NewCategoryScreen.route,
+                text = "add category to quiz app"
+            )
         }
     }
 }
