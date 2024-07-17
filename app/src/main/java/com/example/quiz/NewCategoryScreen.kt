@@ -121,18 +121,22 @@ fun NewCategoryScreen(
 
             Button(
                 onClick = {
-                    if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all { question ->
+                    if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all
+                        { question ->
                             question.answers.isNotEmpty() && question.answers.all { answer ->
                                 answer.answer.isNotBlank()
                             }
                         }) {
                         Log.d("NewCategoryScreen", categoryName)
                         Log.d("NewCategoryScreen", categoryQuestions.toString())
-                        viewModel.addNewCategory(categoryName, categoryQuestions)
-                        errorMessage = ""
-                        val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
-                        navController.navigate(route)
-                    } else {
+                        viewModel.addNewCategory(categoryName, categoryQuestions, onResult = { success ->
+                            errorMessage = if (success) "" else "Failed to create category"
+                            if (success.not()) return@addNewCategory
+                            val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
+                            navController.navigate(route)
+                        })
+                    }
+                    else {
                         categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
                         errorMessage = "Invalid input: Empty category name, questions, or answers"
                     }

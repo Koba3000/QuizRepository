@@ -11,6 +11,7 @@ import com.example.quiz.model.Category
 import com.example.quiz.model.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,7 +46,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun addNewCategory(categoryName: String, questions: List<Question>) {
+    fun addNewCategory(categoryName: String, questions: List<Question>, onResult:(Boolean) -> Unit) {
         viewModelScope.launch {
             try {
                 // Convert List<Question> to List<QuestionDto>
@@ -63,9 +64,21 @@ class CategoryViewModel @Inject constructor(
                 repository.createCategory(categoryDto)
                 // Handle success (e.g., update UI state)
                 Log.d("CategoryViewModel", "Category created successfully")
+                onResult(true)
+                return@launch
+            } catch (e: HttpException) {
+                if (e.code() == 409) {
+                    // Handle specific 409 Conflict error
+                    Log.e("CategoryViewModel", "Conflict: Category already exists", e)
+                } else {
+                    // Handle other HTTP errors
+                    Log.e("CategoryViewModel", "Failed to create category", e)
+                }
             } catch (e: Exception) {
-                // Handle error
+                // Handle non-HTTP errors
+                Log.e("CategoryViewModel", "Failed to create category", e)
             }
+            onResult(false)
         }
     }
 }
