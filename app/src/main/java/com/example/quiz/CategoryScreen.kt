@@ -3,6 +3,8 @@ package com.example.quiz
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -29,7 +31,7 @@ fun CategoryScreen(
     viewModel: CategoryViewModel = hiltViewModel(),
     navController: NavController
 ){
-
+    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -46,6 +48,7 @@ fun CategoryScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp)
+                .verticalScroll(scrollState)
         ) {
             if (viewModel.isLoading) {
                 CircularProgressIndicator(

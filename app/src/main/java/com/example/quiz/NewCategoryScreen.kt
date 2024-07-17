@@ -17,7 +17,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,9 +44,9 @@ fun NewCategoryScreen(
     viewModel: CategoryViewModel = hiltViewModel()
 ){
     val scrollState = rememberScrollState()
-
     var categoryName by remember { mutableStateOf("") }
     var categoryQuestions by remember { mutableStateOf(listOf<Question>()) }
+    var categoryIsEmpty by remember { mutableStateOf(CategoryCheck(false, listOf(), mapOf())) }
 
     Scaffold(
         topBar = {
@@ -66,32 +65,55 @@ fun NewCategoryScreen(
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
         ){
+            Log.d("NewCategoryScreen", "categoryIsEmpty1 ${categoryIsEmpty}")
+
             OutlinedTextField(
                 value = categoryName,
                 onValueChange = { categoryName = it },
                 label = { Text("Category Name") },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            if (categoryIsEmpty.isCategoryNameEmpty) {
+                Text(
+                    text = "Category name cannot be empty",
+                    color = Color.Red,
+                    modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    categoryQuestions = categoryQuestions + Question("", listOf())
+                    categoryQuestions = categoryQuestions + Question("", listOf(), userAdded = true)
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text("Add Question")
             }
+
             categoryQuestions.forEachIndexed { index, question ->
+
                 QuestionPanel(
                     question = question,
+                    questionIndex = index,
                     onQuestionChange =
                     { updatedQuestion ->
                         val updatedQuestions = categoryQuestions.toMutableList()
                         updatedQuestions[index] = updatedQuestion
                         categoryQuestions = updatedQuestions
                     },
-                    categoryName = categoryName)
+                    onRemoveQuestion = {
+                        val updatedQuestions = categoryQuestions.toMutableList().apply {
+                            removeAt(index)
+                        }
+                        categoryQuestions = updatedQuestions
+                    },
+                    categoryIsEmpty = categoryIsEmpty
+                )
+
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
@@ -108,10 +130,10 @@ fun NewCategoryScreen(
                         Log.d("NewCategoryScreen", categoryQuestions.toString())
                         viewModel.addNewCategory(categoryName, categoryQuestions)
                         errorMessage = ""
-
                         val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
                         navController.navigate(route)
                     } else {
+                        categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
                         errorMessage = "Invalid input: Empty category name, questions, or answers"
                     }
                 },
@@ -133,7 +155,13 @@ fun NewCategoryScreen(
 }
 
 @Composable
-fun QuestionPanel(question: Question, onQuestionChange: (Question) -> Unit, categoryName: String) {
+fun QuestionPanel(
+    question: Question,
+    questionIndex: Int,
+    onQuestionChange: (Question) -> Unit,
+    onRemoveQuestion: () -> Unit,
+    categoryIsEmpty: CategoryCheck
+){
     var questionName by remember { mutableStateOf(question.name) }
     var answers by remember { mutableStateOf(question.answers) }
     var showAnswers by remember { mutableStateOf(true) }
@@ -150,7 +178,9 @@ fun QuestionPanel(question: Question, onQuestionChange: (Question) -> Unit, cate
         )
         Spacer(modifier = Modifier.width(8.dp))
         Button(onClick = {
-            val newAnswer = Answer("", false)
+
+            // Set userAdded to true for manually added answers
+            val newAnswer = Answer("", false, userAdded = true)
             answers = answers + newAnswer
             onQuestionChange(question.copy(name = questionName, answers = answers))
         }) {
@@ -160,7 +190,20 @@ fun QuestionPanel(question: Question, onQuestionChange: (Question) -> Unit, cate
         Button(onClick = { showAnswers = !showAnswers }) {
             Text(if (showAnswers) "^" else "v")
         }
+        Button(onClick = onRemoveQuestion) {
+            Text("-")
+        }
     }
+
+    if (categoryIsEmpty.emptyQuestionsIndexes.contains(questionIndex)) {
+        Text(
+            text = "Question name cannot be empty",
+            color = Color.Red,
+            modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+
     if (showAnswers) {
         answers.forEachIndexed { index, answer ->
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -185,7 +228,45 @@ fun QuestionPanel(question: Question, onQuestionChange: (Question) -> Unit, cate
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = {
+                    answers = answers.toMutableList().apply {
+                        removeAt(index)
+                    }
+                    onQuestionChange(question.copy(name = questionName, answers = answers))
+                }) {
+                    Text("-")
+                }
+            }
+            if (categoryIsEmpty.emptyAnswersIndexes[questionIndex]?.contains(index) == true) {
+                Text(
+                    text = "Answer name cannot be empty",
+                    color = Color.Red,
+                    modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                )
             }
         }
     }
+}
+
+fun checkCategories(categoryName: String, questions: List<Question>): CategoryCheck {
+    val isCategoryNameEmpty = categoryName.isBlank()
+    val emptyQuestionsIndexes = mutableListOf<Int>()
+    val emptyAnswersIndexes = mutableMapOf<Int, MutableList<Int>>()
+
+    questions.forEachIndexed { questionIndex, question ->
+        if (question.name.isBlank()) {
+            emptyQuestionsIndexes.add(questionIndex)
+        }
+        val emptyAnswersForQuestion = mutableListOf<Int>()
+        question.answers.forEachIndexed { answerIndex, answer ->
+            if (answer.answer.isBlank()) {
+                emptyAnswersForQuestion.add(answerIndex)
+            }
+        }
+        if (emptyAnswersForQuestion.isNotEmpty()) {
+            emptyAnswersIndexes[questionIndex] = emptyAnswersForQuestion
+        }
+    }
+
+    return CategoryCheck(isCategoryNameEmpty, emptyQuestionsIndexes, emptyAnswersIndexes)
 }
