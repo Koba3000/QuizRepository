@@ -1,4 +1,4 @@
-package com.example.quiz
+package com.example.quiz.screens
 
 
 import android.annotation.SuppressLint

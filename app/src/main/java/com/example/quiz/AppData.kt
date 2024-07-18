@@ -15,19 +15,6 @@ class QuizAttempt(categoryDto: CategoryDto?) {
     var userAnswers: List<List<MutableState<Boolean>>>? = null
 
     init {
-        this.categories = convertDtoToCategory(categoryDto)
-    }
-
-    private fun convertDtoToCategory(categoryDto: CategoryDto): Category {
-        return Category(
-            category = categoryDto.questions?.map { questionDto ->
-                Question(
-                    name = questionDto.name,
-                    answers = questionDto.answers?.map { answerDto ->
-                        Answer(answerDto.answer, answerDto.isCorrect)
-                    } ?: listOf()
-                )
-            } ?: listOf()
-        )
+        this.categories = com.example.quiz.screens.convertDtoToCategory(categoryDto)
     }
 }

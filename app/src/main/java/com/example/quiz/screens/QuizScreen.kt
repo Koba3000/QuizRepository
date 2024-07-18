@@ -1,4 +1,4 @@
-package com.example.quiz
+package com.example.quiz.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.ApiConnection.CategoryDto
 import com.example.quiz.ApiConnection.CategoryViewModel
+import com.example.quiz.AppData
+import com.example.quiz.QuizAttempt
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
@@ -72,6 +74,12 @@ fun QuizScreen(
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
         ) {
+            if (viewModel.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
             val categoryId = navController
                 .currentBackStackEntry
                 ?.arguments
@@ -93,12 +101,31 @@ fun QuizScreen(
                     QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
                 }
 
-                category?.questions?.getOrNull(currentQuestion)?.answers?.forEachIndexed { index, answer ->
-                    QuizAnswer(
-                        quizAnswer = answer.answer,
-                        isCorrectAnswer = answer.isCorrect,
-                        isSelected = answerStates[currentQuestion][index]
-                    )
+//                category?.questions?.getOrNull(currentQuestion)?.answers?.forEachIndexed { index, answer ->
+//                    QuizAnswer(
+//                        quizAnswer = answer.answer,
+//                        isCorrectAnswer = answer.isCorrect,
+//                        isSelected = answerStates[currentQuestion][index]
+//                    )
+//                }
+
+                if (category != null && currentQuestion >= 0 && currentQuestion < (category.questions?.size ?: 0)
+                ) {
+                    val question = category.questions?.getOrNull(currentQuestion)
+                    question?.answers?.let { answers ->
+                        if (answers.isNotEmpty()) {
+                            answers.forEachIndexed { index, answer ->
+                                if (index >= 0 && index < answers.size) {
+                                    // Now safely use answer
+                                    QuizAnswer(
+                                        quizAnswer = answer.answer,
+                                        isCorrectAnswer = answer.isCorrect,
+                                        isSelected = answerStates[currentQuestion].getOrNull(index) ?: mutableStateOf(false)
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Row {
@@ -186,10 +213,11 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
 
 fun convertDtoToCategory(categoryDto: CategoryDto?): Category {
     if (categoryDto == null) {
-        return Category(listOf())
+        return Category("", listOf())
     }
     return Category(
-        category = categoryDto.questions?.map { questionDto ->
+        name = categoryDto.name,
+        questionList = categoryDto.questions?.map { questionDto ->
             Question(
                 name = questionDto.name,
                 answers = questionDto.answers?.map { answerDto ->

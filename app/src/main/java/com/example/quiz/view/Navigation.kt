@@ -1,20 +1,18 @@
 package com.example.quiz.view
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.quiz.AnswersScreen
-import com.example.quiz.ApiConnection.CategoryDto
-import com.example.quiz.ApiConnection.CategoryViewModel
-import com.example.quiz.CategoryScreen
-import com.example.quiz.NewCategoryConfirmationScreen
-import com.example.quiz.NewCategoryScreen
-import com.example.quiz.QuizScreen
-import com.example.quiz.StartScreen
+import com.example.quiz.screens.AnswersScreen
+import com.example.quiz.screens.CategoryScreen
+import com.example.quiz.screens.CategoriesToEditScreen
+import com.example.quiz.screens.NewCategoryConfirmationScreen
+import com.example.quiz.screens.CategoryForms
+import com.example.quiz.screens.QuizScreen
+import com.example.quiz.screens.StartScreen
 
 @Composable
 fun Navigation() {
@@ -28,39 +26,46 @@ fun Navigation() {
             StartScreen(navController)
         }
         composable(
-            Screens.NewCategoryScreen.route
+            route = Screens.CategoryForms.route,
+            arguments = listOf(
+                navArgument(name = "categoryId"){
+                type = NavType.StringType
+                defaultValue = "0"
+            })
         ){
-            NewCategoryScreen(navController = navController)
+            CategoryForms(navController=navController)
         }
-
         composable(
             Screens.CategoryScreen.route
         ){
             CategoryScreen(navController = navController)
         }
-
         composable(
             route = Screens.QuizScreen.route,
-            arguments = listOf(navArgument(name = "categoryId"){
+            arguments = listOf(
+                navArgument(name = "categoryId"){
                 type = NavType.StringType
                 defaultValue = "0"
             })
         ){
             QuizScreen(navController=navController)
         }
-
         composable(
             route = Screens.AnswersScreen.route
         ){
             AnswersScreen(navController)
         }
-
         composable(
             route = Screens.NewCategoryConfirmationScreen.route + "/{categoryName}",
             arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
         ) {
             val categoryName = it.arguments?.getString("categoryName") ?: ""
             NewCategoryConfirmationScreen(navController = navController, categoryName = categoryName)
+        }
+        composable(
+            route = Screens.CategoriesToEdit.route
+        ) {
+            CategoriesToEditScreen(navController = navController)
         }
     }
 }

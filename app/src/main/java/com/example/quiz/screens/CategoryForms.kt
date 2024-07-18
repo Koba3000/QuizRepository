@@ -1,4 +1,4 @@
-package com.example.quiz
+package com.example.quiz.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,25 +34,47 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quiz.ApiConnection.CategoryViewModel
+import com.example.quiz.CategoryCheck
 import com.example.quiz.model.Answer
+import com.example.quiz.model.Category
 import com.example.quiz.model.Question
 import com.example.quiz.view.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewCategoryScreen(
+fun CategoryForms(
     navController: NavController,
     viewModel: CategoryViewModel = hiltViewModel()
 ){
     val scrollState = rememberScrollState()
+    var isEdit by remember { mutableStateOf(false) }
     var categoryName by remember { mutableStateOf("") }
     var categoryQuestions by remember { mutableStateOf(listOf<Question>()) }
     var categoryIsEmpty by remember { mutableStateOf(CategoryCheck(false, listOf(), mapOf())) }
+    val categoryId = navController
+        .currentBackStackEntry
+        ?.arguments
+        ?.getString("categoryId")
+        ?.toIntOrNull() ?: 0
+
+    val category: Category? = if (categoryId != 0) convertDtoToCategory(viewModel.categories.find { it.id == categoryId }) else null
+
+    LaunchedEffect(key1 = category) {
+        if (category != null) {
+            isEdit = true
+            categoryName = category.name
+            categoryQuestions = category.questionList
+        } else {
+            // Initialize with default values if category is null
+            categoryName = ""
+            categoryQuestions = listOf()
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Category") },
+                title = { Text(if (isEdit) "Edit Category" else "New Category") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -65,7 +88,8 @@ fun NewCategoryScreen(
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
         ){
-            Log.d("NewCategoryScreen", "categoryIsEmpty1 ${categoryIsEmpty}")
+//            Log.d("NewCategoryScreen", "categoryIsEmpty1 ${categoryIsEmpty}")
+
 
             OutlinedTextField(
                 value = categoryName,
@@ -119,32 +143,67 @@ fun NewCategoryScreen(
 
             var errorMessage by remember { mutableStateOf("") }
 
-            Button(
-                onClick = {
-                    if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all
-                        { question ->
-                            question.answers.isNotEmpty() && question.answers.all { answer ->
-                                answer.answer.isNotBlank()
-                            }
-                        }) {
-                        Log.d("NewCategoryScreen", categoryName)
-                        Log.d("NewCategoryScreen", categoryQuestions.toString())
-                        viewModel.addNewCategory(categoryName, categoryQuestions, onResult = { success ->
-                            errorMessage = if (success) "" else "Failed to create category"
-                            if (success.not()) return@addNewCategory
-                            val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
-                            navController.navigate(route)
-                        })
-                    }
-                    else {
-                        categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
-                        errorMessage = "Invalid input: Empty category name, questions, or answers"
-                    }
-                },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text("Send Category")
+            if (isEdit){
+                Button(
+                    onClick = {
+                        if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all
+                            { question ->
+                                question.answers.isNotEmpty() && question.answers.all { answer ->
+                                    answer.answer.isNotBlank()
+                                }
+                            }) {
+                            viewModel.updateCategory(categoryId.toString(), categoryName, categoryQuestions, onResult = { success ->
+                                errorMessage = if (success) "" else "Failed to update category"
+                                if (success.not()) return@updateCategory
+                                val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
+                                navController.navigate(route)
+                            })
+                        }
+                        else {
+                            categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
+                            errorMessage = "Invalid input: Empty category name, questions, or answers"
+                        }
+
+//                        viewModel.updateCategory(categoryId.toString(), categoryName, categoryQuestions, onResult = { success ->
+//                            errorMessage = if (success) "" else "Failed to update category"
+//                            if (success.not()) return@updateCategory
+//                            val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
+//                            navController.navigate(route)
+//                        })
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Update Category")
+                }
             }
+            else {
+                Button(
+                    onClick = {
+                        if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all
+                            { question ->
+                                question.answers.isNotEmpty() && question.answers.all { answer ->
+                                    answer.answer.isNotBlank()
+                                }
+                            }) {
+                            Log.d("NewCategoryScreen", "${categoryId} ${categoryName} ${categoryQuestions}")
+                            viewModel.addNewCategory(categoryName, categoryQuestions, onResult = { success ->
+                                errorMessage = if (success) "" else "Category name is already taken. Choose a different name."
+                                if (success.not()) return@addNewCategory
+                                val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
+                                navController.navigate(route)
+                            })
+                        }
+                        else {
+                            categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
+                            errorMessage = "Invalid input: Empty category name, questions, or answers"
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Send Category")
+                }
+            }
+
             if (errorMessage.isNotEmpty()) {
                 Text(
                     text = errorMessage,
@@ -153,6 +212,9 @@ fun NewCategoryScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 8.dp)
                 )
+            }
+            Button(onClick = { Log.d("NewCategoryScreen", "${categoryId} ${categoryName} ${categoryQuestions}") }) {
+                Text(text = "Log Category")
             }
         }
     }

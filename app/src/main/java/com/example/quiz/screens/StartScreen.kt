@@ -1,4 +1,4 @@
-package com.example.quiz
+package com.example.quiz.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +39,13 @@ fun StartScreen(
             )
             NavigationButton(
                 navController = navController,
-                route = Screens.NewCategoryScreen.route,
+                route = Screens.CategoryForms.route,
                 text = "add category to quiz app"
+            )
+            NavigationButton(
+                navController = navController,
+                route = Screens.CategoriesToEdit.route,
+                text = "edit category in quiz app"
             )
         }
     }

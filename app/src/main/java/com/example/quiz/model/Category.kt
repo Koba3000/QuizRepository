@@ -1,5 +1,6 @@
 package com.example.quiz.model
 
 class Category (
-    val category: List<Question>
+    val name: String,
+    val questionList: List<Question>
 )

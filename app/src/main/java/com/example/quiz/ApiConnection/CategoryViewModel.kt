@@ -81,4 +81,38 @@ class CategoryViewModel @Inject constructor(
             onResult(false)
         }
     }
+
+    fun updateCategory(categoryId: String, categoryName: String, questions: List<Question>, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                // Convert List<Question> to List<QuestionDto>
+                val questionDtos = questions.map { question ->
+                    QuestionDto(
+                        name = question.name,
+                        answers = question.answers.map { answer ->
+                            AnswerDto(answer = answer.answer, isCorrect = answer.isCorrect)
+                        }
+                    )
+                }
+                // Create CategoryDto
+                val categoryDto = CategoryDto(name = categoryName, questions = questionDtos)
+                // Use Retrofit to send the PUT request
+                val response = repository.updateCategory(categoryId, categoryDto)
+                if (response.isSuccessful) {
+                    // Handle success (e.g., update UI state)
+                    Log.d("CategoryViewModel", "Category updated successfully")
+
+                    onResult(true)
+                } else {
+                    // Handle request failure
+                    Log.e("CategoryViewModel", "Failed to update category")
+                    onResult(false)
+                }
+            } catch (e: Exception) {
+                // Handle other errors
+                Log.e("CategoryViewModel", "Failed to update category", e)
+                onResult(false)
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.quiz
+package com.example.quiz.screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.quiz.AppData
 import com.example.quiz.model.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,12 +67,12 @@ fun AnswersScreen(
 @Composable
 fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
     val questionPoints = calculateQuestionPoints(category, userAnswers)
-    for (questionIndex in category.category.indices) {
-        Text(text = "Question: " + category.category[questionIndex].name +" " + questionPoints[questionIndex] + " points")
-        for (answerIndex in category.category[questionIndex].answers.indices) {
-            Text(text = "Answer: " + category.category[questionIndex].answers[answerIndex].answer)
+    for (questionIndex in category.questionList.indices) {
+        Text(text = "Question: " + category.questionList[questionIndex].name +" " + questionPoints[questionIndex] + " points")
+        for (answerIndex in category.questionList[questionIndex].answers.indices) {
+            Text(text = "Answer: " + category.questionList[questionIndex].answers[answerIndex].answer)
             Text(text = "User's answer: " + if (userAnswers[questionIndex][answerIndex].value) "TRUE" else "FALSE")
-            Text(text = "Correct answer: " + if (category.category[questionIndex].answers[answerIndex].isCorrect) "TRUE" else "FALSE")
+            Text(text = "Correct answer: " + if (category.questionList[questionIndex].answers[answerIndex].isCorrect) "TRUE" else "FALSE")
         }
     }
 }
@@ -83,10 +84,10 @@ fun calculateTotalPoints(category: Category, answerStates: List<List<MutableStat
 
 fun calculateQuestionPoints(category: Category, answerStates: List<List<MutableState<Boolean>>>): List<Int> {
     val questionPoints = mutableListOf<Int>()
-    for (questionIndex in category.category.indices) {
+    for (questionIndex in category.questionList.indices) {
         var allAnswersCorrect = true
-        for (answerIndex in category.category[questionIndex].answers.indices) {
-            if (answerStates[questionIndex][answerIndex].value != category.category[questionIndex].answers[answerIndex].isCorrect) {
+        for (answerIndex in category.questionList[questionIndex].answers.indices) {
+            if (answerStates[questionIndex][answerIndex].value != category.questionList[questionIndex].answers[answerIndex].isCorrect) {
                 allAnswersCorrect = false
                 break
             }
