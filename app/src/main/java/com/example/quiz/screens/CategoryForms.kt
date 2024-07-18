@@ -88,8 +88,6 @@ fun CategoryForms(
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
         ){
-//            Log.d("NewCategoryScreen", "categoryIsEmpty1 ${categoryIsEmpty}")
-
 
             OutlinedTextField(
                 value = categoryName,
@@ -107,7 +105,20 @@ fun CategoryForms(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            if (isEdit){
+                Button(
+                    onClick = {
+                        viewModel.deleteCategory(categoryId.toString(), onResult = { success ->
+                            if (success) {
+                                navController.navigate(Screens.StartScreen.route)
+                            }
+                        })
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Delete category")
+                }
+            }
 
             Button(
                 onClick = {
@@ -119,7 +130,6 @@ fun CategoryForms(
             }
 
             categoryQuestions.forEachIndexed { index, question ->
-
                 QuestionPanel(
                     question = question,
                     questionIndex = index,

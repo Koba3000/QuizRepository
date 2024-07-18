@@ -115,4 +115,26 @@ class CategoryViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteCategory(categoryId: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                // Use Retrofit to send the DELETE request
+                val response = repository.deleteCategory(categoryId)
+                if (response.isSuccessful) {
+                    // Handle success (e.g., update UI state)
+                    Log.d("CategoryViewModel", "Category deleted successfully")
+                    onResult(true)
+                } else {
+                    // Handle request failure
+                    Log.e("CategoryViewModel", "Failed to delete category")
+                    onResult(false)
+                }
+            } catch (e: Exception) {
+                // Handle other errors
+                Log.e("CategoryViewModel", "Failed to delete category", e)
+                onResult(false)
+            }
+        }
+    }
 }
