@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +41,7 @@ import com.example.quiz.ApiConnection.CategoryDto
 import com.example.quiz.ApiConnection.CategoryViewModel
 import com.example.quiz.AppData
 import com.example.quiz.QuizAttempt
+import com.example.quiz.R
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
@@ -57,7 +59,7 @@ fun QuizScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("QUIZ APP") },
+                title = { Text(stringResource(id = R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = {
                         currentQuestion = 0
@@ -101,22 +103,12 @@ fun QuizScreen(
                     QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
                 }
 
-//                category?.questions?.getOrNull(currentQuestion)?.answers?.forEachIndexed { index, answer ->
-//                    QuizAnswer(
-//                        quizAnswer = answer.answer,
-//                        isCorrectAnswer = answer.isCorrect,
-//                        isSelected = answerStates[currentQuestion][index]
-//                    )
-//                }
-
-                if (category != null && currentQuestion >= 0 && currentQuestion < (category.questions?.size ?: 0)
-                ) {
+                if (category != null && currentQuestion >= 0 && currentQuestion < (category.questions?.size ?: 0)) {
                     val question = category.questions?.getOrNull(currentQuestion)
                     question?.answers?.let { answers ->
                         if (answers.isNotEmpty()) {
                             answers.forEachIndexed { index, answer ->
                                 if (index >= 0 && index < answers.size) {
-                                    // Now safely use answer
                                     QuizAnswer(
                                         quizAnswer = answer.answer,
                                         isCorrectAnswer = answer.isCorrect,
@@ -177,7 +169,7 @@ fun QuizScreen(
                         },
                         shape = RectangleShape
                     ) {
-                        Text(text = "send form")
+                        Text(text = stringResource(id = R.string.send_form))
                     }
                 }
             }

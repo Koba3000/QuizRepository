@@ -16,8 +16,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.quiz.AppData
+import com.example.quiz.R
 import com.example.quiz.model.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +32,7 @@ fun AnswersScreen(
     Scaffold (
         topBar = {
             TopAppBar(
-                title = { Text("QUIZ APP") },
+                title = { Text(stringResource(id = R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -51,13 +53,12 @@ fun AnswersScreen(
                 val totalPoints =
                     calculateTotalPoints(category = category, answerStates = answerStates)
                 Column {
-                    Text(text = "Correct Answers: $totalPoints")
+                    Text(text = stringResource(id = R.string.correct_answers, totalPoints))
                     DisplayFilledForm(category = category, userAnswers = answerStates)
                 }
             } else {
                 Column {
-                    Log.d("AnswersScreen", "Error: No data available. Please try again.")
-                    Text(text = "Error: No data available. Please try again.")
+                    Text(text = stringResource(id = R.string.error_no_data_available))
                 }
             }
         }
@@ -68,11 +69,14 @@ fun AnswersScreen(
 fun DisplayFilledForm(category: Category, userAnswers: List<List<MutableState<Boolean>>>) {
     val questionPoints = calculateQuestionPoints(category, userAnswers)
     for (questionIndex in category.questionList.indices) {
-        Text(text = "Question: " + category.questionList[questionIndex].name +" " + questionPoints[questionIndex] + " points")
+        Text(text = stringResource(
+            id = R.string.question,
+            category.questionList[questionIndex].name, questionPoints[questionIndex]))
+
         for (answerIndex in category.questionList[questionIndex].answers.indices) {
-            Text(text = "Answer: " + category.questionList[questionIndex].answers[answerIndex].answer)
-            Text(text = "User's answer: " + if (userAnswers[questionIndex][answerIndex].value) "TRUE" else "FALSE")
-            Text(text = "Correct answer: " + if (category.questionList[questionIndex].answers[answerIndex].isCorrect) "TRUE" else "FALSE")
+            Text(text = stringResource(id = R.string.answer, category.questionList[questionIndex].answers[answerIndex].answer))
+            Text(text = stringResource(id = R.string.users_answer, if (userAnswers[questionIndex][answerIndex].value) stringResource(id = R.string.true_value) else stringResource(id = R.string.false_value)))
+            Text(text = stringResource(id = R.string.correct_answer, if (category.questionList[questionIndex].answers[answerIndex].isCorrect) stringResource(id = R.string.true_value) else stringResource(id = R.string.false_value)))
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.quiz.view
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,19 +14,23 @@ import com.example.quiz.screens.CategoriesToEditScreen
 import com.example.quiz.screens.NewCategoryConfirmationScreen
 import com.example.quiz.screens.CategoryForms
 import com.example.quiz.screens.QuizScreen
+import com.example.quiz.screens.SettingsScreen
 import com.example.quiz.screens.StartScreen
 
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     NavHost(navController = navController, startDestination = Screens.StartScreen.route) {
+
         composable(
             Screens.StartScreen.route
         ){
             StartScreen(navController)
         }
+
         composable(
             route = Screens.CategoryForms.route,
             arguments = listOf(
@@ -35,11 +41,13 @@ fun Navigation() {
         ){
             CategoryForms(navController=navController)
         }
+
         composable(
             Screens.CategoryScreen.route
         ){
             CategoryScreen(navController = navController)
         }
+
         composable(
             route = Screens.QuizScreen.route,
             arguments = listOf(
@@ -50,11 +58,13 @@ fun Navigation() {
         ){
             QuizScreen(navController=navController)
         }
+
         composable(
             route = Screens.AnswersScreen.route
         ){
             AnswersScreen(navController)
         }
+
         composable(
             route = Screens.NewCategoryConfirmationScreen.route + "/{categoryName}",
             arguments = listOf(navArgument("categoryName") { type = NavType.StringType })
@@ -62,10 +72,17 @@ fun Navigation() {
             val categoryName = it.arguments?.getString("categoryName") ?: ""
             NewCategoryConfirmationScreen(navController = navController, categoryName = categoryName)
         }
+
         composable(
             route = Screens.CategoriesToEdit.route
         ) {
             CategoriesToEditScreen(navController = navController)
+        }
+
+        composable(
+            route = Screens.SettingsScreen.route
+        ) {
+            SettingsScreen(navController = navController)
         }
     }
 }

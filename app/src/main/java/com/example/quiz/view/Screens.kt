@@ -8,4 +8,5 @@ sealed class Screens(val route: String) {
     object CategoryForms : Screens("category_forms/{categoryId}")
     object NewCategoryConfirmationScreen : Screens("new_category_confirmation_screen")
     object CategoriesToEdit : Screens("categories_to_edit")
+    object SettingsScreen : Screens("settings_screen")
 }

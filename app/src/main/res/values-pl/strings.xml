@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="settings_test">Ustawienia</string>
+    <string name="category">Kategoria</string>
+    <string name="play_quiz">graj w aplikację quizową</string>
+    <string name="add_category">dodaj kategorię</string>
+    <string name="edit_categories">edytuj kategorie</string>
+    <string name="settings">ustawienia</string>
+    <string name="send_form">wyślij formularz</string>
+    <string name="error_no_data_available">Błąd: Brak dostępnych danych. Proszę spróbować ponownie.</string>
+    <string name="correct_answers">Poprawne odpowiedzi: %1$d</string>
+    <string name="question">Pytanie: %1$s %2$d punktów</string>
+    <string name="answer">Odpowiedź: %1$s</string>
+    <string name="users_answer">Odpowiedź użytkownika: %1$s</string>
+    <string name="correct_answer">Poprawna odpowiedź: %1$s</string>
+    <string name="true_value">PRAWDA</string>
+    <string name="false_value">FAŁSZ</string>
+    <string name="edit_cateogry">Edytuj Kategorię</string>
+    <string name="new_category">Nowa Kategoria</string>
+    <string name="category_name_empty">Nazwa kategorii nie może być pusta</string>
+    <string name="delete_category">Usuń kategorię</string>
+    <string name="add_question">Dodaj Pytanie</string>
+    <string name="failed_to_update_category">Nie udało się zaktualizować kategorii</string>
+    <string name="invalid_input">Nieprawidłowe dane: Pusta nazwa kategorii, pytania lub odpowiedzi</string>
+    <string name="update_category">Zaktualizuj kategorię</string>
+    <string name="category_name_occupied">Nazwa kategorii jest już zajęta. Wybierz inną nazwę.</string>
+    <string name="send_category">Wyślij Kategorię</string>
+    <string name="category_name">Nazwa Kategorii</string>
+    <string name="question_name_empty">Nazwa pytania nie może być pusta</string>
+    <string name="answers_indexed">Odpowiedź %1$d</string>
+    <string name="answer_empty">Nazwa odpowiedzi nie może być pusta</string>
+    <string name="question_name">Nazwa pytania</string>
+    <string name="category_added_successfully">Kategoria została pomyślnie dodana</string>
+
+
+</resources>

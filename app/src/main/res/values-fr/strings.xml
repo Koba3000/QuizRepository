@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="settings_test">Paramètres</string>
+    <string name="category">Catégorie</string>
+    <string name="play_quiz">jouer à l\'application de quiz</string>
+    <string name="add_category">ajouter une catégorie</string>
+    <string name="edit_categories">modifier les catégories</string>
+    <string name="settings">paramètres</string>
+    <string name="send_form">envoyer le formulaire</string>
+    <string name="error_no_data_available">Erreur : Pas de données disponibles. Veuillez réessayer.</string>
+    <string name="correct_answers">Réponses Correctes : %1$d</string>
+    <string name="question">Question : %1$s %2$d points</string>
+    <string name="answer">Réponse : %1$s</string>
+    <string name="users_answer">Réponse de l\'utilisateur : %1$s</string>
+    <string name="correct_answer">Réponse correcte : %1$s</string>
+    <string name="true_value">VRAI</string>
+    <string name="false_value">FAUX</string>
+    <string name="edit_cateogry">Modifier la Catégorie</string>
+    <string name="new_category">Nouvelle Catégorie</string>
+    <string name="category_name_empty">Le nom de la catégorie ne peut pas être vide</string>
+    <string name="delete_category">Supprimer la catégorie</string>
+    <string name="add_question">Ajouter une Question</string>
+    <string name="failed_to_update_category">Échec de la mise à jour de la catégorie</string>
+    <string name="invalid_input">Entrée invalide : Nom de catégorie, questions ou réponses vides</string>
+    <string name="update_category">Mettre à jour la catégorie</string>
+    <string name="category_name_occupied">Le nom de la catégorie est déjà pris. Choisissez un autre nom.</string>
+    <string name="send_category">Envoyer la Catégorie</string>
+    <string name="category_name">Nom de la Catégorie</string>
+    <string name="question_name_empty">Le nom de la question ne peut pas être vide</string>
+    <string name="answers_indexed">Réponse %1$d</string>
+    <string name="answer_empty">Le nom de la réponse ne peut pas être vide</string>
+    <string name="question_name">Nom de la question</string>
+    <string name="category_added_successfully">Catégorie ajoutée avec succès</string>
+
+
+</resources>

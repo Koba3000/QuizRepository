@@ -30,11 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quiz.ApiConnection.CategoryViewModel
 import com.example.quiz.CategoryCheck
+import com.example.quiz.R
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
@@ -74,7 +76,8 @@ fun CategoryForms(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEdit) "Edit Category" else "New Category") },
+//                title = { Text(if (isEdit) "Edit Category" else "New Category") },
+                title = { Text(if (isEdit) stringResource(id = R.string.edit_cateogry) else stringResource(id = R.string.new_category)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -92,13 +95,13 @@ fun CategoryForms(
             OutlinedTextField(
                 value = categoryName,
                 onValueChange = { categoryName = it },
-                label = { Text("Category Name") },
+                label = { Text(text = stringResource(id = R.string.category_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             if (categoryIsEmpty.isCategoryNameEmpty) {
                 Text(
-                    text = "Category name cannot be empty",
+                    text = stringResource(id = R.string.category_name_empty),
                     color = Color.Red,
                     modifier = Modifier.padding(start = 8.dp, top = 4.dp)
                 )
@@ -116,7 +119,7 @@ fun CategoryForms(
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text("Delete category")
+                    Text(text = stringResource(id = R.string.delete_category))
                 }
             }
 
@@ -126,7 +129,7 @@ fun CategoryForms(
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Add Question")
+                Text(text = stringResource(id = R.string.add_question))
             }
 
             categoryQuestions.forEachIndexed { index, question ->
@@ -163,7 +166,7 @@ fun CategoryForms(
                                 }
                             }) {
                             viewModel.updateCategory(categoryId.toString(), categoryName, categoryQuestions, onResult = { success ->
-                                errorMessage = if (success) "" else "Failed to update category"
+                                errorMessage = if (success) "" else R.string.failed_to_update_category.toString()
                                 if (success.not()) return@updateCategory
                                 val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
                                 navController.navigate(route)
@@ -171,19 +174,12 @@ fun CategoryForms(
                         }
                         else {
                             categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
-                            errorMessage = "Invalid input: Empty category name, questions, or answers"
+                            errorMessage = R.string.invalid_input.toString()
                         }
-
-//                        viewModel.updateCategory(categoryId.toString(), categoryName, categoryQuestions, onResult = { success ->
-//                            errorMessage = if (success) "" else "Failed to update category"
-//                            if (success.not()) return@updateCategory
-//                            val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
-//                            navController.navigate(route)
-//                        })
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text("Update Category")
+                    Text(text = stringResource(id = R.string.update_category))
                 }
             }
             else {
@@ -195,9 +191,8 @@ fun CategoryForms(
                                     answer.answer.isNotBlank()
                                 }
                             }) {
-                            Log.d("NewCategoryScreen", "${categoryId} ${categoryName} ${categoryQuestions}")
                             viewModel.addNewCategory(categoryName, categoryQuestions, onResult = { success ->
-                                errorMessage = if (success) "" else "Category name is already taken. Choose a different name."
+                                errorMessage = if (success) "" else R.string.category_name_occupied.toString()
                                 if (success.not()) return@addNewCategory
                                 val route = Screens.NewCategoryConfirmationScreen.route + "/$categoryName"
                                 navController.navigate(route)
@@ -205,26 +200,23 @@ fun CategoryForms(
                         }
                         else {
                             categoryIsEmpty = checkCategories(categoryName, categoryQuestions)
-                            errorMessage = "Invalid input: Empty category name, questions, or answers"
+                            errorMessage = R.string.invalid_input.toString()
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Text("Send Category")
+                    Text(text = stringResource(id = R.string.send_category))
                 }
             }
 
             if (errorMessage.isNotEmpty()) {
                 Text(
-                    text = errorMessage,
+                    text = stringResource(id = R.string.invalid_input),
                     color = Color.Red,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 8.dp)
                 )
-            }
-            Button(onClick = { Log.d("NewCategoryScreen", "${categoryId} ${categoryName} ${categoryQuestions}") }) {
-                Text(text = "Log Category")
             }
         }
     }
@@ -249,7 +241,7 @@ fun QuestionPanel(
                 questionName = newName
                 onQuestionChange(question.copy(name = newName, answers = answers))
             },
-            label = { Text("Question Name") },
+            label = { Text(text = stringResource(id = R.string.question_name)) },
             modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -273,7 +265,7 @@ fun QuestionPanel(
 
     if (categoryIsEmpty.emptyQuestionsIndexes.contains(questionIndex)) {
         Text(
-            text = "Question name cannot be empty",
+            text = stringResource(id = R.string.question_name_empty),
             color = Color.Red,
             modifier = Modifier.padding(start = 8.dp, top = 4.dp)
         )
@@ -291,7 +283,8 @@ fun QuestionPanel(
                         answers = updatedAnswers
                         onQuestionChange(question.copy(name = questionName, answers = answers))
                     },
-                    label = { Text("Answer ${index + 1}") },
+//                    label = { Text("Answer ${index + 1}") },
+                    label = { Text(text = stringResource(id = R.string.answers_indexed, (index + 1))) },
                     modifier = Modifier.weight(1f)
                 )
                 Checkbox(
@@ -315,7 +308,7 @@ fun QuestionPanel(
             }
             if (categoryIsEmpty.emptyAnswersIndexes[questionIndex]?.contains(index) == true) {
                 Text(
-                    text = "Answer name cannot be empty",
+                    text = stringResource(id = R.string.answer_empty),
                     color = Color.Red,
                     modifier = Modifier.padding(start = 8.dp, top = 4.dp)
                 )
