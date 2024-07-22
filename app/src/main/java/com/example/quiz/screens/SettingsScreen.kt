@@ -11,6 +11,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,7 +40,6 @@ fun SettingsScreen(
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
-
     val context = LocalContext.current
     val isLoading = remember { mutableStateOf(false) }
 
@@ -61,7 +62,6 @@ fun SettingsScreen(
                 .verticalScroll(scrollState)
         ) {
             Text(text = stringResource(R.string.settings_test), fontSize = 24.sp)
-
 
             // Button for English
             Button(onClick = {
@@ -91,23 +91,6 @@ fun SettingsScreen(
         }
     }
 }
-
-//fun updateLocale(context: Context, languageCode: String) {
-//    // Save the language preference
-//    saveLanguagePreference(context, languageCode)
-//
-//    // Update the locale
-//    val locale = Locale(languageCode)
-//    Locale.setDefault(locale)
-//    val config = Configuration(context.resources.configuration)
-//    config.setLocale(locale)
-//    context.resources.updateConfiguration(config, context.resources.displayMetrics)
-//
-//    // Recreate the current activity to apply changes
-//    if (context is Activity) {
-//        context.recreate()
-//    }
-//}
 
 fun updateLocale(context: Context, languageCode: String, isLoading: MutableState<Boolean>) {
     saveLanguagePreference(context, languageCode)

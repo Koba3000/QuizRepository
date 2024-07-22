@@ -1,6 +1,9 @@
 package com.example.quiz.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,9 +23,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.ApiConnection.CategoryViewModel
+import com.example.quiz.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +39,7 @@ fun CategoryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("QUIZ APP") },
+                title = { Text(stringResource(id = R.string.app_name)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -69,11 +74,12 @@ fun CategoryScreen(
 @Composable
 fun CategoryNavigationButton(navController: NavController, text: String, buttonId: String) {
     val url = Screens.QuizScreen.route.replace("{categoryId}", buttonId)
-    Button(onClick = {
-        navController.navigate(url)
-    }) {
-        Text(text = text,
-            style = TextStyle(fontSize = 20.sp)
-        )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = { navController.navigate(url) }) {
+            Text(text = text, style = TextStyle(fontSize = 20.sp))
+        }
     }
 }

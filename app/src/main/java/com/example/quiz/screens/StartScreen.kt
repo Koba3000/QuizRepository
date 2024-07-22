@@ -1,11 +1,18 @@
 package com.example.quiz.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -29,6 +36,21 @@ fun StartScreen(
             TopAppBar(
                 title = { Text(stringResource(id = R.string.app_name)) }
             )
+        },
+        bottomBar = {
+            BottomAppBar(
+                containerColor = MaterialTheme.colorScheme.secondary // Change to your desired color
+            ) {
+                // Spacer to push the settings icon to the right
+                Spacer(modifier = Modifier.weight(1f))
+                // Settings icon button
+                IconButton(
+                    onClick = { navController.navigate(Screens.SettingsScreen.route) },
+                    modifier = Modifier.padding(25.dp)
+                ) {
+                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                }
+            }
         }
     ) { paddingValues ->
         Column(
@@ -41,19 +63,10 @@ fun StartScreen(
             )
             NavigationButton(
                 navController = navController,
-                route = Screens.CategoryForms.route,
-                text = stringResource(id = R.string.add_category)
-            )
-            NavigationButton(
-                navController = navController,
                 route = Screens.CategoriesToEdit.route,
-                text = stringResource(id = R.string.edit_categories)
+                text = stringResource(id = R.string.categories)
             )
-            NavigationButton(
-                navController = navController,
-                route = Screens.SettingsScreen.route,
-                text = stringResource(id = R.string.settings)
-            )
+
         }
     }
 }

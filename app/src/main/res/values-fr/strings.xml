@@ -3,9 +3,9 @@
     <string name="app_name">QuizApp</string>
     <string name="settings_test">Paramètres</string>
     <string name="category">Catégorie</string>
-    <string name="play_quiz">jouer à l\'application de quiz</string>
+    <string name="play_quiz">jouer</string>
     <string name="add_category">ajouter une catégorie</string>
-    <string name="edit_categories">modifier les catégories</string>
+    <string name="categories">catégories</string>
     <string name="settings">paramètres</string>
     <string name="send_form">envoyer le formulaire</string>
     <string name="error_no_data_available">Erreur : Pas de données disponibles. Veuillez réessayer.</string>
@@ -16,7 +16,7 @@
     <string name="correct_answer">Réponse correcte : %1$s</string>
     <string name="true_value">VRAI</string>
     <string name="false_value">FAUX</string>
-    <string name="edit_cateogry">Modifier la Catégorie</string>
+    <string name="edit_category">Modifier la Catégorie</string>
     <string name="new_category">Nouvelle Catégorie</string>
     <string name="category_name_empty">Le nom de la catégorie ne peut pas être vide</string>
     <string name="delete_category">Supprimer la catégorie</string>

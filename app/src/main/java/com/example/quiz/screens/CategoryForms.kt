@@ -1,6 +1,5 @@
 package com.example.quiz.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -76,8 +75,7 @@ fun CategoryForms(
     Scaffold(
         topBar = {
             TopAppBar(
-//                title = { Text(if (isEdit) "Edit Category" else "New Category") },
-                title = { Text(if (isEdit) stringResource(id = R.string.edit_cateogry) else stringResource(id = R.string.new_category)) },
+                title = { Text(if (isEdit) stringResource(id = R.string.edit_category) else stringResource(id = R.string.new_category)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -90,6 +88,8 @@ fun CategoryForms(
             modifier = Modifier
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
+                .fillMaxWidth()
+                .padding(16.dp)
         ){
 
             OutlinedTextField(
