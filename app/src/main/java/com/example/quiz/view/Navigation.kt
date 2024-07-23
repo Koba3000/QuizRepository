@@ -1,7 +1,6 @@
 package com.example.quiz.view
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,12 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.quiz.screens.AnswersScreen
-import com.example.quiz.screens.CategoryScreen
+import com.example.quiz.screens.category.CategoryScreen
 import com.example.quiz.screens.CategoriesToEditScreen
 import com.example.quiz.screens.NewCategoryConfirmationScreen
 import com.example.quiz.screens.CategoryForms
 import com.example.quiz.screens.QuizScreen
-import com.example.quiz.screens.SettingsScreen
+import com.example.quiz.screens.settings.SettingsScreen
 import com.example.quiz.screens.StartScreen
 
 @Composable

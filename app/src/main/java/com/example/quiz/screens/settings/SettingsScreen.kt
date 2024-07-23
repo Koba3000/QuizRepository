@@ -1,19 +1,15 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.settings
 
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,19 +25,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quiz.R
+import com.example.quiz.composables.DropdownMenu
 import com.example.quiz.view.Screens
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val isLoading = remember { mutableStateOf(false) }
+    val languages = viewModel.languages
+    var selectedLanguage = viewModel.selectedLanguage.value
+
 
     Scaffold(
         topBar = {
@@ -63,31 +65,49 @@ fun SettingsScreen(
         ) {
             Text(text = stringResource(R.string.settings_test), fontSize = 24.sp)
 
-            // Button for English
-            Button(onClick = {
-                isLoading.value = true
-                updateLocale(context, "en", isLoading)
-            }) {
-                Text("English")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+//            // Button for English
+//            Button(onClick = {
+//                isLoading.value = true
+//                updateLocale(context, "en", isLoading)
+//            }) {
+//                Text("English")
+//            }
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            // Button for Français
+//            Button(onClick = {
+//                isLoading.value = true
+//                updateLocale(context, "fr", isLoading)
+//            }) {
+//                Text("Français")
+//            }
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            // Button for Polski
+//            Button(onClick = {
+//                isLoading.value = true
+//                updateLocale(context, "pl", isLoading)
+//            }) {
+//                Text("Polski")
+//            }
 
-            // Button for Français
-            Button(onClick = {
-                isLoading.value = true
-                updateLocale(context, "fr", isLoading)
-            }) {
-                Text("Français")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
 
-            // Button for Polski
-            Button(onClick = {
-                isLoading.value = true
-                updateLocale(context, "pl", isLoading)
-            }) {
-                Text("Polski")
-            }
+            Log.d("SettingsScreen", "Selected Language: $selectedLanguage")
+
+            DropdownMenu(
+                items = languages,
+                selectedItem = selectedLanguage,
+                label = "Select language",
+                onSelect = { selected ->
+                    if (selected != null) {
+                        viewModel.selectedLanguage.value = selected
+                        isLoading.value = true
+                        Log.d("SettingsScreen", "Selected Language: $selected")
+                        updateLocale(context, selected, isLoading)
+                    }
+                }
+            )
+
         }
     }
 }
@@ -114,9 +134,9 @@ fun saveLanguagePreference(context: Context, languageCode: String) {
     prefs.edit().putString("SelectedLanguage", languageCode).apply()
 }
 
-fun loadLanguagePreference(context: Context): String? {
+fun loadLanguagePreference(context: Context): String?{
     val prefs = context.getSharedPreferences("LanguageSettings", Context.MODE_PRIVATE)
-    return prefs.getString("SelectedLanguage", Locale.getDefault().language)
+    return prefs.getString("SelectedLanguage", "en")
 }
 
 fun setLocale(context: Context, languageCode: String) {

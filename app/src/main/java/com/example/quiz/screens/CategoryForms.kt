@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.quiz.ApiConnection.CategoryViewModel
+import com.example.quiz.screens.category.CategoryViewModel
 import com.example.quiz.CategoryCheck
 import com.example.quiz.R
 import com.example.quiz.model.Answer

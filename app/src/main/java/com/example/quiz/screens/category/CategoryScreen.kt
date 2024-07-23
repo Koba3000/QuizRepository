@@ -1,4 +1,4 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.category
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.quiz.ApiConnection.CategoryViewModel
 import com.example.quiz.R
 
 @OptIn(ExperimentalMaterial3Api::class)
