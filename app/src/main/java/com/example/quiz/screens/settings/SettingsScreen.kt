@@ -5,11 +5,14 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,8 +21,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,23 +33,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.quiz.R
 import com.example.quiz.composables.DropdownMenu
+import com.example.quiz.screens.login.LoginViewModel
 import com.example.quiz.view.Screens
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val isLoading = remember { mutableStateOf(false) }
-    val languages = viewModel.languages
-    var selectedLanguage = viewModel.selectedLanguage.value
-
+    val languages = settingsViewModel.languages
+    val selectedLanguage = settingsViewModel.selectedLanguage.value
+    var user by loginViewModel.user
 
     Scaffold(
         topBar = {
@@ -100,13 +109,27 @@ fun SettingsScreen(
                 label = "Select language",
                 onSelect = { selected ->
                     if (selected != null) {
-                        viewModel.selectedLanguage.value = selected
+                        settingsViewModel.selectedLanguage.value = selected
                         isLoading.value = true
                         Log.d("SettingsScreen", "Selected Language: $selected")
                         updateLocale(context, selected, isLoading)
                     }
                 }
             )
+
+            Text("Welcome ${user?.displayName}")
+            AsyncImage(
+                model = user?.photoUrl,
+                contentDescription = "User Photo",
+                modifier = Modifier.size(64.dp)
+            )
+
+            Button(onClick = {
+                loginViewModel.logout()
+                navController.navigate(Screens.LoginScreen.route)
+            }) {
+                Text("Logout")
+            }
 
         }
     }

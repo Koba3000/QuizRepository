@@ -1,4 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="WEB_CLIENT_ID" translatable="false">936662049831-prpv2uf9p7dprv2rakug56btua3aea0i.apps.googleusercontent.com</string>
     <string name="app_name">QuizApp</string>
     <string name="settings_test">Settings</string>
     <string name="category">Category</string>
@@ -31,4 +32,7 @@
     <string name="answer_empty">Answer name cannot be empty</string>
     <string name="question_name">Question name</string>
     <string name="category_added_successfully">Category added successfully</string>
+    <string name="app_desc">test</string>
+    <string name="APP_SLOGAN">"app slogan "</string>
+    <string name="AUTH_ERROR_MSG">AUTH_ERROR_MSG</string>
 </resources>

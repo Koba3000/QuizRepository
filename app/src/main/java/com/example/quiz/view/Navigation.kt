@@ -1,7 +1,6 @@
 package com.example.quiz.view
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,14 +14,20 @@ import com.example.quiz.screens.CategoryForms
 import com.example.quiz.screens.QuizScreen
 import com.example.quiz.screens.settings.SettingsScreen
 import com.example.quiz.screens.StartScreen
+import com.example.quiz.screens.login.LoginScreen
 
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
-    val context = LocalContext.current
 
-    NavHost(navController = navController, startDestination = Screens.StartScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.LoginScreen.route) {
+
+        composable(
+            Screens.LoginScreen.route
+        ){
+            LoginScreen(navController = navController)
+        }
 
         composable(
             Screens.StartScreen.route
