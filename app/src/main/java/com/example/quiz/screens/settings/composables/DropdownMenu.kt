@@ -1,4 +1,4 @@
-package com.example.quiz.composables
+package com.example.quiz.screens.settings.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
