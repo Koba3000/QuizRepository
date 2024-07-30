@@ -1,6 +1,7 @@
 package com.example.quiz.view
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,13 +16,21 @@ import com.example.quiz.screens.QuizScreen
 import com.example.quiz.screens.settings.SettingsScreen
 import com.example.quiz.screens.StartScreen
 import com.example.quiz.screens.login.LoginScreen
+import com.example.quiz.screens.login.LoginViewModel
 
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
+    val loginViewModel: LoginViewModel = hiltViewModel()
 
-    NavHost(navController = navController, startDestination = Screens.LoginScreen.route) {
+    val startDestination = if (loginViewModel.isUserLoggedIn()) {
+        Screens.StartScreen.route
+    } else {
+        Screens.LoginScreen.route
+    }
+
+    NavHost(navController = navController, startDestination = startDestination) {
 
         composable(
             Screens.LoginScreen.route

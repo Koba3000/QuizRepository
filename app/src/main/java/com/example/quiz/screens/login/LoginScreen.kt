@@ -75,7 +75,7 @@ fun LoginScreen(
         ) {
             Column {
                 if (user == null) {
-                    Text("Not logged in")
+                    Text("Welcome to the Quiz App. Sign in to continue.")
                     Button(onClick = {
                         val gso =
                             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -87,7 +87,8 @@ fun LoginScreen(
                     }) {
                         Text("Sign in via Google")
                     }
-                } else {
+                }
+                else {
                     Text("Welcome ${user!!.displayName}")
                     Button(onClick = {
                         Firebase.auth.signOut()

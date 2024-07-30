@@ -21,4 +21,8 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     fun setUser(newUser: FirebaseUser?) {
         user.value = newUser
     }
+
+    fun isUserLoggedIn(): Boolean {
+        return user.value != null
+    }
 }
