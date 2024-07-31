@@ -37,5 +37,6 @@
     <string name="signing_in">Connexion…</string>
     <string name="welcome_user">Bienvenue %1$s!</string>
     <string name="logout">Déconnexion</string>
+    <string name="select_language">Sélectionnez la langue</string>
 
 </resources>

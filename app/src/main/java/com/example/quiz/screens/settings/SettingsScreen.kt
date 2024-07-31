@@ -41,16 +41,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    navController: NavController,
     settingsViewModel: SettingsViewModel = hiltViewModel(),
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    navController: NavController
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val isLoading = remember { mutableStateOf(false) }
     val languages = settingsViewModel.languages
     val selectedLanguage = settingsViewModel.selectedLanguage.value
-    var user by loginViewModel.user
+    val user by loginViewModel.user
 
     Scaffold(
         topBar = {
@@ -72,44 +72,13 @@ fun SettingsScreen(
         ) {
             Text(text = stringResource(R.string.settings_test), fontSize = 24.sp)
 
-//            // Button for English
-//            Button(onClick = {
-//                isLoading.value = true
-//                updateLocale(context, "en", isLoading)
-//            }) {
-//                Text("English")
-//            }
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            // Button for Français
-//            Button(onClick = {
-//                isLoading.value = true
-//                updateLocale(context, "fr", isLoading)
-//            }) {
-//                Text("Français")
-//            }
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            // Button for Polski
-//            Button(onClick = {
-//                isLoading.value = true
-//                updateLocale(context, "pl", isLoading)
-//            }) {
-//                Text("Polski")
-//            }
-
-
-            Log.d("SettingsScreen", "Selected Language: $selectedLanguage")
-
             DropdownMenu(
                 items = languages,
                 selectedItem = selectedLanguage,
-                label = "Select language",
+                label = stringResource(id = R.string.select_language),
                 onSelect = { selected ->
                     if (selected != null) {
-                        settingsViewModel.selectedLanguage.value = selected
                         isLoading.value = true
-                        Log.d("SettingsScreen", "Selected Language: $selected")
                         updateLocale(context, selected, isLoading)
                     }
                 }

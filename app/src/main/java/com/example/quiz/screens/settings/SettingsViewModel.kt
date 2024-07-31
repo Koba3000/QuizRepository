@@ -9,4 +9,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor() : ViewModel(){
     val languages = listOf("en", "pl", "fr")
     var selectedLanguage = mutableStateOf(languages[0])
+
+//    fun updateSelectedLanguage(language: String) {
+//        selectedLanguage.value = language
+//    }
 }
