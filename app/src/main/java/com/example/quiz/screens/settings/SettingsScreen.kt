@@ -115,7 +115,7 @@ fun SettingsScreen(
                 }
             )
 
-            Text("Welcome ${user?.displayName}")
+            Text((stringResource(R.string.welcome_user, user?.displayName ?: "")))
             AsyncImage(
                 model = user?.photoUrl,
                 contentDescription = "User Photo",
@@ -126,7 +126,7 @@ fun SettingsScreen(
                 loginViewModel.logout()
                 navController.navigate(Screens.LoginScreen.route)
             }) {
-                Text("Logout")
+                Text(stringResource(id = R.string.logout))
             }
 
         }

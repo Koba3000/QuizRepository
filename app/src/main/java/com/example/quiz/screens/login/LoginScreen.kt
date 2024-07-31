@@ -1,7 +1,5 @@
 package com.example.quiz.screens.login
 
-import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
@@ -13,8 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.quiz.screens.login.composables.GoogleButton
 import com.example.quiz.view.Screens
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -75,18 +72,17 @@ fun LoginScreen(
         ) {
             Column {
                 if (user == null) {
-                    Text("Welcome to the Quiz App. Sign in to continue.")
-                    Button(onClick = {
-                        val gso =
-                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                .requestIdToken(token)
-                                .requestEmail()
-                                .build()
-                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                        launcher.launch(googleSignInClient.signInIntent)
-                    }) {
-                        Text("Sign in via Google")
-                    }
+                    Text(stringResource(id = R.string.welcome_to_quiz))
+                    GoogleButton(
+                        onClicked = {
+                            val gso =
+                                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken(token)
+                                    .requestEmail()
+                                    .build()
+                            val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                            launcher.launch(googleSignInClient.signInIntent) }
+                    )
                 }
                 else {
                     Text("Welcome ${user!!.displayName}")
@@ -94,7 +90,7 @@ fun LoginScreen(
                         Firebase.auth.signOut()
                         user = null
                     }) {
-                        Text("Sign out")
+                        Text(stringResource(id = R.string.logout))
                     }
                 }
             }

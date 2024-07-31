@@ -32,6 +32,10 @@
     <string name="answer_empty">Nazwa odpowiedzi nie może być pusta</string>
     <string name="question_name">Nazwa pytania</string>
     <string name="category_added_successfully">Kategoria została pomyślnie dodana</string>
-
+    <string name="welcome_to_quiz">Witamy w Quiz App!</string>
+    <string name="sign_in_with_google">Zaloguj się przez Google</string>
+    <string name="signing_in">Logowanie…</string>
+    <string name="welcome_user">Witaj %1$s!</string>
+    <string name="logout">Wyloguj</string>
 
 </resources>
