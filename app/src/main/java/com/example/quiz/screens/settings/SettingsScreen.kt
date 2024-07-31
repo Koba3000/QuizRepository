@@ -79,6 +79,7 @@ fun SettingsScreen(
                 onSelect = { selected ->
                     if (selected != null) {
                         isLoading.value = true
+                        settingsViewModel.updateSelectedLanguage(selected)
                         updateLocale(context, selected, isLoading)
                     }
                 }
