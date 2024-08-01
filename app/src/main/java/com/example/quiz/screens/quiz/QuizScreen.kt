@@ -1,11 +1,17 @@
 package com.example.quiz.screens.quiz
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
@@ -31,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
@@ -45,6 +53,9 @@ import com.example.quiz.R
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
+import com.example.quiz.ui.theme.FontSizeLarge
+import com.example.quiz.ui.theme.QuizButton
+import com.example.quiz.ui.theme.QuizText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,121 +66,137 @@ fun QuizScreen(
     val scrollState = rememberScrollState()
     var currentQuestion by remember { mutableIntStateOf(0) }
     val answerStates = viewModel.answerStates.value
+    val backgroundColor = Color(0xFFcaf0f8)
+    val topBarBackgroundColor = Color(0xFF90e0ef)
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.app_name)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = topBarBackgroundColor
+                ),
+                title = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    ) {
+                        QuizText(
+                            text = stringResource(id = R.string.app_name),
+                            fontSize = FontSizeLarge
+                        )
+                    }
+                },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        currentQuestion = 0
-                        navController.navigate(Screens.CategoryScreen.route)
-                    }) {
+                    IconButton(onClick = { navController.navigate(Screens.CategoryScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
         }
     ){ paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
+                .background(backgroundColor)
                 .verticalScroll(scrollState)
         ) {
-            if (viewModel.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-
-            val categoryId = navController
-                .currentBackStackEntry
-                ?.arguments
-                ?.getString("categoryId")
-                ?.toIntOrNull() ?: 0
-
-            Column {
-
-                val category = viewModel.categories.firstOrNull { it.id == categoryId }
-
-                category?.questions?.forEach { question ->
-                    Log.d("QuizScreen", "Question: ${question.name}")
-                    question.answers?.forEach { answer ->
-                        Log.d("QuizScreen", "Answer: ${answer.answer}, Is Correct: ${answer.isCorrect}")
-                    } ?: Log.d("QuizScreen", "No answers available for this question")
-                } ?: Log.d("QuizScreen", "No questions available for this category")
-
-                if (category != null) {
-                    QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
 
-                if (category != null && currentQuestion >= 0 && currentQuestion < (category.questions?.size ?: 0)) {
-                    val question = category.questions?.getOrNull(currentQuestion)
-                    question?.answers?.let { answers ->
-                        if (answers.isNotEmpty()) {
-                            answers.forEachIndexed { index, answer ->
-                                if (index >= 0 && index < answers.size) {
-                                    QuizAnswer(
-                                        quizAnswer = answer.answer,
-                                        isCorrectAnswer = answer.isCorrect,
-                                        isSelected = answerStates[currentQuestion].getOrNull(index) ?: mutableStateOf(false)
-                                    )
+                val categoryId = navController
+                    .currentBackStackEntry
+                    ?.arguments
+                    ?.getString("categoryId")
+                    ?.toIntOrNull() ?: 0
+
+                Column {
+                    val category = viewModel.categories.firstOrNull { it.id == categoryId }
+
+                    category?.questions?.forEach { question ->
+                        Log.d("QuizScreen", "Question: ${question.name}")
+                        question.answers?.forEach { answer ->
+                            Log.d("QuizScreen", "Answer: ${answer.answer}, Is Correct: ${answer.isCorrect}")
+                        } ?: Log.d("QuizScreen", "No answers available for this question")
+                    } ?: Log.d("QuizScreen", "No questions available for this category")
+
+                    if (category != null) {
+                        QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
+                    }
+
+                    if (category != null && currentQuestion >= 0 && currentQuestion < (category.questions?.size ?: 0)) {
+                        val question = category.questions?.getOrNull(currentQuestion)
+                        question?.answers?.let { answers ->
+                            if (answers.isNotEmpty()) {
+                                answers.forEachIndexed { index, answer ->
+                                    if (index >= 0 && index < answers.size) {
+                                        QuizAnswer(
+                                            quizAnswer = answer.answer,
+                                            isCorrectAnswer = answer.isCorrect,
+                                            isSelected = answerStates[currentQuestion].getOrNull(index) ?: mutableStateOf(false)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                Row {
-                    Button(
-                        modifier = Modifier
-                            .height(100.dp)
-                            .padding(10.dp),
-                        onClick = {
-                            if (currentQuestion > 0) {
-                                currentQuestion--
-                            }
-                        },
-                        shape = RectangleShape
-                    ) {
-                        Text(text = "<<<")
-                    }
+                    Row {
+                        QuizButton(
+                            modifier = Modifier
+                                .height(100.dp)
+                                .padding(10.dp),
+                            onClick = {
+                                if (currentQuestion > 0) {
+                                    currentQuestion--
+                                }
+                            },
+                            text = "<<<"
+                        )
 
-                    Button(
-                        modifier = Modifier
-                            .height(100.dp)
-                            .padding(10.dp),
-                        onClick = {
-                            if (currentQuestion < (category?.questions?.size ?: 0) - 1) {
-                                currentQuestion++
-                            }
-                        },
-                        shape = RectangleShape
-                    ) {
-                        Text(text = ">>>")
-                    }
-                    Text(
-                        text = (currentQuestion + 1).toString() + "/" + (category?.questions?.size ?: 0),
-                        style = TextStyle(fontSize = 20.sp)
-                    )
+                        QuizButton(
+                            modifier = Modifier
+                                .height(100.dp)
+                                .padding(10.dp),
+                            onClick = {
+                                if (currentQuestion < (category?.questions?.size ?: 0) - 1) {
+                                    currentQuestion++
+                                }
+                            },
+                            text = ">>>"
+                        )
+                        QuizText(
+                            text = (currentQuestion + 1).toString() + "/" + (category?.questions?.size ?: 0),
+                            fontSize = 20.sp
+                        )
 
-                    Button(
-                        modifier = Modifier
-                            .height(100.dp)
-                            .padding(10.dp),
-                        onClick = {
-                            val categoryDto: CategoryDto? = category// Obtain your CategoryDto object
-                            val _category: Category = convertDtoToCategory(categoryDto)
-                            AppData.quizAttempt = QuizAttempt(categoryDto).apply {
-                                this.categories = _category
-                                this.userAnswers = answerStates
-                            }
-                            currentQuestion = 0
-                            navController.navigate(Screens.AnswersScreen.route)
-                        },
-                        shape = RectangleShape
-                    ) {
-                        Text(text = stringResource(id = R.string.send_form))
+                        QuizButton(
+                            modifier = Modifier
+                                .height(100.dp)
+                                .padding(10.dp),
+                            onClick = {
+                                val categoryDto: CategoryDto? = category // Obtain your CategoryDto object
+                                val _category: Category = convertDtoToCategory(categoryDto)
+                                AppData.quizAttempt = QuizAttempt(categoryDto).apply {
+                                    this.categories = _category
+                                    this.userAnswers = answerStates
+                                }
+                                currentQuestion = 0
+                                navController.navigate(Screens.AnswersScreen.route)
+                            },
+                            text = stringResource(id = R.string.send_form)
+                        )
                     }
                 }
             }
@@ -179,7 +206,7 @@ fun QuizScreen(
 
 @Composable
 fun QuizQuestion(quizQuestion: String) {
-    Text(text = quizQuestion,
+    QuizText(text = quizQuestion,
         modifier = Modifier.padding(10.dp),
         style = TextStyle(fontSize = 25.sp)
         )
@@ -199,7 +226,7 @@ fun QuizAnswer(quizAnswer: String, isCorrectAnswer: Boolean, isSelected: Mutable
                 uncheckedColor = Color.Gray
             )
         )
-        Text(text = quizAnswer)
+        QuizText(text = quizAnswer)
     }
 }
 
