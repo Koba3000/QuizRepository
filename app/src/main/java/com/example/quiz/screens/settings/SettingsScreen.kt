@@ -104,13 +104,17 @@ fun SettingsScreen(
 }
 
 fun updateLocale(context: Context, languageCode: String, isLoading: MutableState<Boolean>) {
+    // Save the language preference
     saveLanguagePreference(context, languageCode)
 
+    // Update the locale
     val locale = Locale(languageCode)
     Locale.setDefault(locale)
     val config = Configuration(context.resources.configuration)
     config.setLocale(locale)
+    context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
+    // Recreate the Activity to apply the new locale
     if (context is Activity) {
         context.runOnUiThread {
             context.recreate()
@@ -120,8 +124,11 @@ fun updateLocale(context: Context, languageCode: String, isLoading: MutableState
 }
 
 fun saveLanguagePreference(context: Context, languageCode: String) {
-    val prefs = context.getSharedPreferences("LanguageSettings", Context.MODE_PRIVATE)
-    prefs.edit().putString("SelectedLanguage", languageCode).apply()
+    val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+    with(sharedPreferences.edit()) {
+        putString("language_code", languageCode)
+        apply()
+    }
 }
 
 fun loadLanguagePreference(context: Context): String?{
