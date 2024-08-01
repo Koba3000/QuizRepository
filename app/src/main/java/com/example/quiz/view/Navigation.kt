@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.quiz.screens.answer.AnswersScreen
-import com.example.quiz.screens.category.CategoryScreen
+import com.example.quiz.screens.categories.CategoryScreen
 import com.example.quiz.screens.categories.CategoriesToEditScreen
 import com.example.quiz.screens.categories.NewCategoryConfirmationScreen
 import com.example.quiz.screens.categories.CategoryForms

@@ -62,12 +62,13 @@ fun SettingsScreen(
     val selectedLanguage = settingsViewModel.selectedLanguage.value
     val user by loginViewModel.user
     val backgroundColor = Color(0xFFcaf0f8)
+    val topBarBackgroundColor = Color(0xFF90e0ef)
 
     Scaffold(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor
+                    containerColor = topBarBackgroundColor
                 ),
                 title = {
                     Box(

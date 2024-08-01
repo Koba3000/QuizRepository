@@ -38,7 +38,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.ApiConnection.CategoryDto
-import com.example.quiz.screens.category.CategoryViewModel
+import com.example.quiz.screens.categories.CategoryViewModel
 import com.example.quiz.AppData
 import com.example.quiz.QuizAttempt
 import com.example.quiz.R

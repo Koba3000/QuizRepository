@@ -1,10 +1,14 @@
-package com.example.quiz.screens.category
+package com.example.quiz.screens.categories
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -17,16 +21,22 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.view.Screens
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.R
+import com.example.quiz.ui.theme.FontSizeLarge
+import com.example.quiz.ui.theme.QuizButton
+import com.example.quiz.ui.theme.QuizText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,10 +45,27 @@ fun CategoryScreen(
     navController: NavController
 ){
     val scrollState = rememberScrollState()
+    val backgroundColor = Color(0xFFcaf0f8)
+    val topBarBackgroundColor = Color(0xFF90e0ef)
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.app_name)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = topBarBackgroundColor
+                ),
+                title = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
+                    ) {
+                        QuizText(
+                            text = stringResource(id = R.string.app_name),
+                            fontSize = FontSizeLarge
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screens.StartScreen.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -47,24 +74,33 @@ fun CategoryScreen(
             )
         }
     ) { paddingValues ->
-        Column (
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .background(backgroundColor)
                 .verticalScroll(scrollState)
         ) {
-            if (viewModel.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
 
-            viewModel.categories.forEach {
-                CategoryNavigationButton(
-                    navController = navController,
-                    text = it.name,
-                    buttonId = it.id.toString()
-                )
+                viewModel.categories.forEach {
+                    CategoryNavigationButton(
+                        navController = navController,
+                        text = it.name,
+                        buttonId = it.id.toString()
+                    )
+                }
             }
         }
     }
@@ -77,8 +113,6 @@ fun CategoryNavigationButton(navController: NavController, text: String, buttonI
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { navController.navigate(url) }) {
-            Text(text = text, style = TextStyle(fontSize = 20.sp))
-        }
+        QuizButton(onClick = { navController.navigate(url) }, text = text)
     }
 }

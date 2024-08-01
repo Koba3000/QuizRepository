@@ -1,4 +1,4 @@
-package com.example.quiz.screens.category
+package com.example.quiz.screens.categories
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
