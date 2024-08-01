@@ -1,4 +1,4 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.categories
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quiz.screens.category.CategoryViewModel
 import com.example.quiz.R
+import com.example.quiz.screens.start.NavigationButton
 import com.example.quiz.view.Screens
-import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

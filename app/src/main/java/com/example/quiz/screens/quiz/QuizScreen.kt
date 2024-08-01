@@ -1,4 +1,4 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.quiz
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column

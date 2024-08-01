@@ -1,4 +1,4 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.categories
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +39,7 @@ import com.example.quiz.R
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
+import com.example.quiz.screens.quiz.convertDtoToCategory
 import com.example.quiz.view.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)

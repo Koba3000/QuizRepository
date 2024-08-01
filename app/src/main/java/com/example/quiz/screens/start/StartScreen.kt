@@ -1,4 +1,4 @@
-package com.example.quiz.screens
+package com.example.quiz.screens.start
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

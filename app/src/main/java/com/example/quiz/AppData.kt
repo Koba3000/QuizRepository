@@ -2,9 +2,8 @@ package com.example.quiz
 
 import androidx.compose.runtime.MutableState
 import com.example.quiz.ApiConnection.CategoryDto
-import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
-import com.example.quiz.model.Question
+import com.example.quiz.screens.quiz.convertDtoToCategory
 
 object AppData {
     var quizAttempt: QuizAttempt? = null
@@ -15,6 +14,6 @@ class QuizAttempt(categoryDto: CategoryDto?) {
     var userAnswers: List<List<MutableState<Boolean>>>? = null
 
     init {
-        this.categories = com.example.quiz.screens.convertDtoToCategory(categoryDto)
+        this.categories = convertDtoToCategory(categoryDto)
     }
 }
