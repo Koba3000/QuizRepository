@@ -1,10 +1,8 @@
 package com.example.quiz.ui.theme
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentWidth
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -25,9 +23,7 @@ fun QuizText(
 ) {
     Text(
         text = text,
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentWidth(Alignment.CenterHorizontally),
+        modifier = modifier,
         color = color,
         fontSize = fontSize,
         fontWeight = fontWeight,

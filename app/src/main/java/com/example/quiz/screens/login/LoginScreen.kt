@@ -38,6 +38,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -51,7 +52,6 @@ import androidx.compose.ui.unit.sp
 import com.example.quiz.ui.theme.FontSizeLarge
 import com.example.quiz.ui.theme.QuizText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel(),
@@ -69,25 +69,16 @@ fun LoginScreen(
     )
     val token = stringResource(R.string.default_web_client_id)
     val context = LocalContext.current
+    val backgroundColor = Color(0xFFcaf0f8) // Replace with your desired background color
 
     Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = { Text(stringResource(id = R.string.app_name)) }
-//            )
-//        }
     ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .background(backgroundColor) // Set background color
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.background_image),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
