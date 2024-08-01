@@ -110,7 +110,6 @@ fun updateLocale(context: Context, languageCode: String, isLoading: MutableState
     Locale.setDefault(locale)
     val config = Configuration(context.resources.configuration)
     config.setLocale(locale)
-    context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
     if (context is Activity) {
         context.runOnUiThread {
@@ -135,5 +134,5 @@ fun setLocale(context: Context, languageCode: String) {
     Locale.setDefault(locale)
     val config = Configuration(context.resources.configuration)
     config.setLocale(locale)
-    context.resources.updateConfiguration(config, context.resources.displayMetrics)
+    context.createConfigurationContext(config)
 }

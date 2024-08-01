@@ -32,11 +32,10 @@
     <string name="answer_empty">Answer name cannot be empty</string>
     <string name="question_name">Question name</string>
     <string name="category_added_successfully">Category added successfully</string>
-    <string name="app_desc">test</string>
-    <string name="APP_SLOGAN">"app slogan "</string>
-    <string name="AUTH_ERROR_MSG">AUTH_ERROR_MSG</string>
+    <string name="APP_SLOGAN" translatable="false">"app slogan "</string>
+    <string name="AUTH_ERROR_MSG" translatable="false">AUTH_ERROR_MSG</string>
     <string name="default_web_client_id" translatable="false">254132675511-m5uj5tppkpdpcpevhfv1bc8ff940j894.apps.googleusercontent.com</string>
-    <string name="welcome_to_quiz">Welcome to Quiz App!</string>
+    <string name="welcome_to_quiz">Create quiz faster and easier with our app!</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="signing_in">Signing in…</string>
     <string name="welcome_user">Welcome %1$s!</string>

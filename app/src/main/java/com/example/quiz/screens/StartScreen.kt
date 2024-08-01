@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.quiz.R
+import com.example.quiz.ui.theme.QuizText
 import com.example.quiz.view.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +35,7 @@ fun StartScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.app_name)) }
+                title = { QuizText(stringResource(id = R.string.app_name)) }
             )
         },
         bottomBar = {
