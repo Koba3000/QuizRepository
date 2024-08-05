@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.quiz.R
 import com.example.quiz.screens.login.LoginViewModel
+import com.example.quiz.screens.start.composables.ChatGptButton
 import com.example.quiz.ui.theme.FontSizeLarge
 import com.example.quiz.ui.theme.QuizButton
 import com.example.quiz.ui.theme.QuizText
@@ -98,6 +99,7 @@ fun StartScreen(
                     route = Screens.CategoriesToEdit.route,
                     text = stringResource(id = R.string.categories)
                 )
+                ChatGptButton()
             }
         }
     }
