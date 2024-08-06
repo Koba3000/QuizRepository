@@ -2,6 +2,7 @@ package com.example.quiz.ApiConnection
 
 import com.example.quiz.ApiConnection.OpenAiConnection.OpenAiRepository
 import com.example.quiz.ApiConnection.OpenAiConnection.OpenAiService
+import com.example.quiz.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,7 +23,7 @@ object NetworkModule {
 
     private const val BASE_URL = "http://10.0.2.2:8080/"
     private const val OPENAI_BASE_URL = "https://api.openai.com/"
-    private const val API_KEY = "" // Replace with your actual API key
+    private const val API_KEY = BuildConfig.OPENAI_API_KEY
 
     @Provides
     @Singleton
