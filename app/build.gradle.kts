@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -27,6 +29,19 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        val openAiApiKey: String? = localProperties.getProperty("openai.api.key")
+        if (openAiApiKey != null) {
+            buildConfigField("String", "OPENAI_API_KEY", "\"$openAiApiKey\"")
+        } else {
+            throw GradleException("openai.api.key in local.properties not found")
+        }
     }
 
     buildTypes {
@@ -44,6 +59,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
