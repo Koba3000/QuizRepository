@@ -47,6 +47,7 @@ import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
 import com.example.quiz.screens.quiz.convertDtoToCategory
+import com.example.quiz.screens.start.composables.ChatGptButton
 import com.example.quiz.ui.theme.FontSizeLarge
 import com.example.quiz.ui.theme.QuizButton
 import com.example.quiz.ui.theme.QuizText
@@ -150,6 +151,8 @@ fun CategoryForms(
                                     })
                             })
                     }
+
+                    ChatGptButton()
 
                     QuizButton(
                         text = stringResource(id = R.string.add_question),
