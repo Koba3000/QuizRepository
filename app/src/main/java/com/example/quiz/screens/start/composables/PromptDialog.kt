@@ -18,6 +18,8 @@ fun PromptDialog(
     onDismiss: () -> Unit,
     onSubmit: () -> Unit
 ) {
+
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "Enter Prompt") },

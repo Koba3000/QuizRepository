@@ -9,6 +9,7 @@ import com.example.quiz.apiConnection.openAiConnection.Message
 import com.example.quiz.apiConnection.openAiConnection.OpenAiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,12 +25,15 @@ class OpenViewModel @Inject constructor(
             try {
                 Log.d("OpenViewModel", "Sending prompt: $prompt")
                 val messages = parseMessages(prompt)
-                val result = openAiRepository.getCompletions(100, messages)
+                Log.d("OpenViewModel", "Parsed messages: $messages")
+                val result = openAiRepository.getCompletions(500, messages)
                 if (result.isSuccessful) {
                     val responseBody = result.body()
                     Log.d("OpenViewModel", "Received response: $responseBody")
-                    _response.value = responseBody?.choices?.get(0)?.message?.content ?: "No response"
-//                    _response.value = responseBody?.choices?.firstOrNull()?.text ?: "No response"
+                    val content = responseBody?.choices?.get(0)?.message?.content
+                    Log.d("OpenViewModel", "Content: $content")
+
+                    _response.value = content ?: "No response"
                 } else {
                     Log.e("OpenViewModel", "Error response: ${result.errorBody()?.string()}")
                     _response.value = "Error: ${result.errorBody()?.string()}"
@@ -41,10 +45,20 @@ class OpenViewModel @Inject constructor(
         }
     }
 
+//    private fun parseMessages(rawString: String): List<Message> {
+//        // Example parsing logic, adjust as needed
+//        return rawString.split("\n").map { line ->
+//            Message(role = "user", content = line)
+//        }
+//    }
+
     private fun parseMessages(rawString: String): List<Message> {
-        // Example parsing logic, adjust as needed
-        return rawString.split("\n").map { line ->
-            Message(role = "user", content = line)
-        }
+        val additionalInfo = """
+            Create only a JSON object (inclusive lack of spaces) for a quiz app with the following structure:
+            {"name":"Maths","questions":[{"name":"2 + 2?","answers":[{"title":"4","isCorrect":true}]},{"name":"2+2*2?","answers":[{"title":"4","isCorrect":false}]}]}
+        """.trimIndent()
+
+        val combinedPrompt = "$rawString\n\n$additionalInfo"
+        return listOf(Message(role = "user", content = combinedPrompt))
     }
 }
