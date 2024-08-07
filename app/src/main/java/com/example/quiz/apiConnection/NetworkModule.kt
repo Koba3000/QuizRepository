@@ -1,7 +1,7 @@
-package com.example.quiz.ApiConnection
+package com.example.quiz.apiConnection
 
-import com.example.quiz.ApiConnection.OpenAiConnection.OpenAiRepository
-import com.example.quiz.ApiConnection.OpenAiConnection.OpenAiService
+import com.example.quiz.apiConnection.openAiConnection.OpenAiRepository
+import com.example.quiz.apiConnection.openAiConnection.OpenAiService
 import com.example.quiz.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

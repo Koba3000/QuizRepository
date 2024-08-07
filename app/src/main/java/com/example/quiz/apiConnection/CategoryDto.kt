@@ -1,4 +1,4 @@
-package com.example.quiz.ApiConnection
+package com.example.quiz.apiConnection
 
 import com.squareup.moshi.Json
 

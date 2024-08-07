@@ -1,7 +1,6 @@
-package com.example.quiz.ApiConnection
+package com.example.quiz.apiConnection
 
 import retrofit2.Response
-import javax.inject.Inject
 
 class CategoryRepository(private val apiService: ApiService): ApiService {
 

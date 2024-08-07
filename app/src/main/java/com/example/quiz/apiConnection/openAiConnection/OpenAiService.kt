@@ -1,4 +1,4 @@
-package com.example.quiz.ApiConnection.OpenAiConnection
+package com.example.quiz.apiConnection.openAiConnection
 
 import retrofit2.Response
 import retrofit2.http.Body

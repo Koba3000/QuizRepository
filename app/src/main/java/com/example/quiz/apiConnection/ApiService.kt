@@ -1,4 +1,4 @@
-package com.example.quiz.ApiConnection
+package com.example.quiz.apiConnection
 
 import retrofit2.Response
 import retrofit2.http.Body
