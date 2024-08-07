@@ -38,5 +38,6 @@
     <string name="welcome_user">Bienvenue %1$s!</string>
     <string name="logout">Déconnexion</string>
     <string name="select_language">Sélectionnez la langue</string>
+    <string name="chatGptText">créez une catégorie avec l\'IA !</string>
 
 </resources>

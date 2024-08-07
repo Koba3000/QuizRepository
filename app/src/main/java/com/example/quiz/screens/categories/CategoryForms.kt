@@ -43,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quiz.CategoryCheck
 import com.example.quiz.R
+import com.example.quiz.apiConnection.openAiConnection.dto.CategoryDto
 import com.example.quiz.model.Answer
 import com.example.quiz.model.Category
 import com.example.quiz.model.Question
@@ -52,6 +53,8 @@ import com.example.quiz.ui.theme.FontSizeLarge
 import com.example.quiz.ui.theme.QuizButton
 import com.example.quiz.ui.theme.QuizText
 import com.example.quiz.view.Screens
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +68,8 @@ fun CategoryForms(
     var categoryQuestions by remember { mutableStateOf(listOf<Question>()) }
     var categoryIsEmpty by remember { mutableStateOf(CategoryCheck(false, listOf(), mapOf())) }
     var loading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf("") }
+
     val categoryId = navController
         .currentBackStackEntry
         ?.arguments
@@ -152,7 +157,12 @@ fun CategoryForms(
                             })
                     }
 
-                    ChatGptButton()
+                    ChatGptButton(onResponse = { response ->
+                        // Parse the response and update the form fields
+                        val parsedCategory = parseCategoryResponse(extractJsonContent(response))
+                        categoryName = parsedCategory.name
+                        categoryQuestions = parsedCategory.questionList
+                    })
 
                     QuizButton(
                         text = stringResource(id = R.string.add_question),
@@ -183,8 +193,6 @@ fun CategoryForms(
 
                         Spacer(modifier = Modifier.height(8.dp))
                     }
-
-                    var errorMessage by remember { mutableStateOf("") }
 
                     if (isEdit) {
                         QuizButton(
@@ -255,6 +263,31 @@ fun CategoryForms(
             }
         }
     }
+}
+
+fun extractJsonContent(response: String): String {
+    val jsonStartIndex = response.indexOf("{")
+    val jsonEndIndex = response.lastIndexOf("}") + 1
+    return if (jsonStartIndex != -1 && jsonEndIndex != -1) {
+        response.substring(jsonStartIndex, jsonEndIndex)
+    } else {
+        ""
+    }
+}
+
+fun parseCategoryResponse(response: String): Category {
+    val jsonContent = extractJsonContent(response)
+    if (jsonContent.isBlank()) {
+        throw IllegalArgumentException("Invalid JSON content")
+    }
+
+    val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+    val jsonAdapter = moshi.adapter(CategoryDto::class.java)
+    val categoryDto = jsonAdapter.fromJson(jsonContent)
+
+    return categoryDto?.toCategory() ?: throw IllegalArgumentException("Failed to parse JSON")
 }
 
 @Composable

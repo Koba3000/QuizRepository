@@ -45,13 +45,6 @@ class OpenViewModel @Inject constructor(
         }
     }
 
-//    private fun parseMessages(rawString: String): List<Message> {
-//        // Example parsing logic, adjust as needed
-//        return rawString.split("\n").map { line ->
-//            Message(role = "user", content = line)
-//        }
-//    }
-
     private fun parseMessages(rawString: String): List<Message> {
         val additionalInfo = """
             Create only a JSON object (inclusive lack of spaces) for a quiz app with the following structure:

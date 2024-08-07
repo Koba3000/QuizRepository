@@ -38,6 +38,7 @@
     <string name="welcome_user">Witaj %1$s!</string>
     <string name="logout">Wyloguj</string>
     <string name="select_language">Wybierz język</string>
+    <string name="chatGptText">utwórz kategorię za pomocą AI!</string>
 
 
 </resources>
