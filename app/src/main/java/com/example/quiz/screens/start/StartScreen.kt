@@ -99,7 +99,6 @@ fun StartScreen(
                     route = Screens.CategoriesToEdit.route,
                     text = stringResource(id = R.string.categories)
                 )
-                ChatGptButton()
             }
         }
     }

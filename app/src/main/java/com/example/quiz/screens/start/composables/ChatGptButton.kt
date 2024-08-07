@@ -3,19 +3,20 @@ package com.example.quiz.screens.start.composables
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.quiz.screens.start.OpenViewModel
 import com.example.quiz.ui.theme.QuizButton
+import com.example.quiz.R
 
 @Composable
 fun ChatGptButton(
-    openViewModel: OpenViewModel = hiltViewModel()
+    openViewModel: OpenViewModel = hiltViewModel(),
+    onResponse: (String) -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var prompt by remember { mutableStateOf("") }
@@ -25,7 +26,7 @@ fun ChatGptButton(
         .fillMaxWidth()
         .padding(16.dp)) {
 
-        QuizButton(text = "Ask ChatGPT", onClick = { showDialog = true })
+        QuizButton(text = stringResource(id = R.string.chatGptText), onClick = { showDialog = true })
 
         if (showDialog) {
             PromptDialog(
@@ -39,8 +40,10 @@ fun ChatGptButton(
             )
         }
 
-        if (response.isNotEmpty()) {
-            Text(text = "Response: $response", modifier = Modifier.padding(top = 16.dp))
+        LaunchedEffect(response) {
+            if (response.isNotEmpty()) {
+                onResponse(response)
+            }
         }
     }
 }
