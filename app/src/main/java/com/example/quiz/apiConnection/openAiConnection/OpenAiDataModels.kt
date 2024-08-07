@@ -1,4 +1,4 @@
-package com.example.quiz.ApiConnection.OpenAiConnection
+package com.example.quiz.apiConnection.openAiConnection
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -1,7 +1,7 @@
 package com.example.quiz
 
 import androidx.compose.runtime.MutableState
-import com.example.quiz.ApiConnection.CategoryDto
+import com.example.quiz.apiConnection.CategoryDto
 import com.example.quiz.model.Category
 import com.example.quiz.screens.quiz.convertDtoToCategory
 

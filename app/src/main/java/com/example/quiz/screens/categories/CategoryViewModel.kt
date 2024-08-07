@@ -7,10 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quiz.ApiConnection.AnswerDto
-import com.example.quiz.ApiConnection.CategoryDto
-import com.example.quiz.ApiConnection.CategoryRepository
-import com.example.quiz.ApiConnection.QuestionDto
+import com.example.quiz.apiConnection.AnswerDto
+import com.example.quiz.apiConnection.CategoryDto
+import com.example.quiz.apiConnection.CategoryRepository
+import com.example.quiz.apiConnection.QuestionDto
 import com.example.quiz.model.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
