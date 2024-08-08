@@ -9,7 +9,6 @@ import com.example.quiz.apiConnection.openAiConnection.Message
 import com.example.quiz.apiConnection.openAiConnection.OpenAiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +25,7 @@ class OpenViewModel @Inject constructor(
                 Log.d("OpenViewModel", "Sending prompt: $prompt")
                 val messages = parseMessages(prompt)
                 Log.d("OpenViewModel", "Parsed messages: $messages")
-                val result = openAiRepository.getCompletions(500, messages)
+                val result = openAiRepository.getCompletions(messages)
                 if (result.isSuccessful) {
                     val responseBody = result.body()
                     Log.d("OpenViewModel", "Received response: $responseBody")
@@ -47,11 +46,12 @@ class OpenViewModel @Inject constructor(
 
     private fun parseMessages(rawString: String): List<Message> {
         val additionalInfo = """
-            Create only a JSON object (inclusive lack of spaces) for a quiz app with the following structure:
+            Create only a JSON object (inclusive lack of spaces) for a quiz app with the following structure(4 answers per question):
             {"name":"Maths","questions":[{"name":"2 + 2?","answers":[{"title":"4","isCorrect":true}]},{"name":"2+2*2?","answers":[{"title":"4","isCorrect":false}]}]}
+            Based on succeeding data:
         """.trimIndent()
 
-        val combinedPrompt = "$rawString\n\n$additionalInfo"
+        val combinedPrompt = "$additionalInfo$rawString"
         return listOf(Message(role = "user", content = combinedPrompt))
     }
 }
