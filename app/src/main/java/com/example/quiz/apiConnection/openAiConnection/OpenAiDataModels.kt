@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
 data class OpenAiRequest(
     @Json(name = "max_tokens") val maxTokens: Int,
     @Json(name = "model") val model: String = "gpt-4o-mini",
-    @Json(name = "messages") val messages: List<Message>,
-    @Json(name = "temperature") val temperature: Double = 0.7
+    @Json(name = "temperature") val temperature: Double,
+    @Json(name = "messages") val messages: List<Message>
 )
 
 @JsonClass(generateAdapter = true)
