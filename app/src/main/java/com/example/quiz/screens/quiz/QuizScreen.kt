@@ -66,6 +66,10 @@ fun QuizScreen(
     val backgroundColor = Color(0xFFcaf0f8)
     val topBarBackgroundColor = Color(0xFF90e0ef)
 
+
+
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -121,13 +125,6 @@ fun QuizScreen(
                 Column {
                     val category = viewModel.categories.firstOrNull { it.id == categoryId }
 
-                    category?.questions?.forEach { question ->
-                        Log.d("QuizScreen", "Question: ${question.name}")
-                        question.answers?.forEach { answer ->
-                            Log.d("QuizScreen", "Answer: ${answer.answer}, Is Correct: ${answer.isCorrect}")
-                        } ?: Log.d("QuizScreen", "No answers available for this question")
-                    } ?: Log.d("QuizScreen", "No questions available for this category")
-
                     if (category != null) {
                         QuizQuestion(quizQuestion = category.questions?.get(currentQuestion)?.name ?: "No question available")
                     }
@@ -141,7 +138,7 @@ fun QuizScreen(
                                         QuizAnswer(
                                             quizAnswer = answer.answer,
                                             isCorrectAnswer = answer.isCorrect,
-                                            isSelected = answerStates[currentQuestion].getOrNull(index) ?: mutableStateOf(false)
+                                            isSelected = answerStates[categoryId]?.get(currentQuestion)?.getOrNull(index) ?: mutableStateOf(false)
                                         )
                                     }
                                 }
@@ -183,11 +180,11 @@ fun QuizScreen(
                                 .height(100.dp)
                                 .padding(10.dp),
                             onClick = {
-                                val categoryDto: CategoryDto? = category // Obtain your CategoryDto object
+                                val categoryDto: CategoryDto? = category
                                 val _category: Category = convertDtoToCategory(categoryDto)
                                 AppData.quizAttempt = QuizAttempt(categoryDto).apply {
                                     this.categories = _category
-                                    this.userAnswers = answerStates
+                                    this.userAnswers = answerStates[categoryId] ?: emptyList()
                                 }
                                 currentQuestion = 0
                                 navController.navigate(Screens.AnswersScreen.route)
