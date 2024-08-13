@@ -168,7 +168,7 @@ fun CategoryForms(
                         text = stringResource(id = R.string.add_question),
                         onClick = {
                             categoryQuestions =
-                                categoryQuestions + Question("", listOf(), userAdded = true)
+                                categoryQuestions + Question("", listOf())
                         }
                     )
 

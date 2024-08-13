@@ -23,7 +23,7 @@ class CategoryViewModel @Inject constructor(
 ) : ViewModel() {
     var isLoading by mutableStateOf(true)
     var categories by mutableStateOf(emptyList<CategoryDto>())
-    var answerStates = mutableStateOf(listOf<List<MutableState<Boolean>>>())
+    var answerStates = mutableStateOf(mapOf<Int, List<List<MutableState<Boolean>>>>())
 
     init {
         fetchCategories()
@@ -31,21 +31,18 @@ class CategoryViewModel @Inject constructor(
 
     private fun fetchCategories() {
         viewModelScope.launch {
-            viewModelScope.launch {
-                try {
-                    categories = repository.getCategories()
-                    // Initialize answerStates based on fetched categories
-                    answerStates.value = categories.flatMap { category ->
-                        category.questions?.map { question ->
-                            question.answers?.map { mutableStateOf(false) } ?: emptyList()
-                        } ?: emptyList()
-                    }
-                    Log.d("CategoryViewModel", "Categories fetched successfully")
-                } catch (e: Exception) {
-                    Log.e("CategoryViewModel", "Failed to fetch categories", e)
+            try {
+                categories = repository.getCategories()
+                // Initialize answerStates based on fetched categories
+                answerStates.value = categories.associate { category ->
+                    category.id!!.toInt() to (category.questions?.map { question ->
+                        question.answers?.map { mutableStateOf(false) } ?: emptyList()
+                    } ?: emptyList())
                 }
-                isLoading = false
+            } catch (e: Exception) {
+                Log.e("CategoryViewModel", "Failed to fetch categories", e)
             }
+            isLoading = false
         }
     }
 
