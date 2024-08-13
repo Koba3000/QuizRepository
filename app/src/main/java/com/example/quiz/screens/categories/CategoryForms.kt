@@ -317,7 +317,7 @@ fun QuestionPanel(
         Spacer(modifier = Modifier.width(8.dp))
         Button(
             onClick = {
-                val newAnswer = Answer("", false, userAdded = true)
+                val newAnswer = Answer("", false)
                 answers = answers + newAnswer
                 onQuestionChange(question.copy(name = questionName, answers = answers))
             },
