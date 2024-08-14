@@ -157,13 +157,6 @@ fun CategoryForms(
                             })
                     }
 
-                    ChatGptButton(onResponse = { response ->
-                        // Parse the response and update the form fields
-                        val parsedCategory = parseCategoryResponse(extractJsonContent(response))
-                        categoryName = parsedCategory.name
-                        categoryQuestions = parsedCategory.questionList
-                    })
-
                     QuizButton(
                         text = stringResource(id = R.string.add_question),
                         onClick = {
@@ -224,6 +217,13 @@ fun CategoryForms(
                                 }
                             })
                     } else {
+                        ChatGptButton(onResponse = { response ->
+                            // Parse the response and update the form fields
+                            val parsedCategory = parseCategoryResponse(extractJsonContent(response))
+                            categoryName = parsedCategory.name
+                            categoryQuestions = parsedCategory.questionList
+                        })
+
                         QuizButton(text = stringResource(id = R.string.send_category), onClick = {
                             if (categoryName.isNotBlank() && categoryQuestions.isNotEmpty() && categoryQuestions.all
                                 { question ->
