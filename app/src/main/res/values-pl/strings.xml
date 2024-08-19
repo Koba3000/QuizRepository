@@ -39,6 +39,9 @@
     <string name="logout">Wyloguj</string>
     <string name="select_language">Wybierz język</string>
     <string name="chatGptText">utwórz kategorię za pomocą AI!</string>
+    <string name="enter_prompt">Saisissez l\'invite</string>
+    <string name="submit">soumettre</string>
+    <string name="cancel">annuler</string>
 
 
 </resources>

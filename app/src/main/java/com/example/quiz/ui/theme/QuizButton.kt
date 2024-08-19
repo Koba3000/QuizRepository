@@ -20,11 +20,12 @@ fun QuizButton(
             .fillMaxWidth()
             .height(100.dp)
             .padding(20.dp),
+    buttonColor: Color = Color(0xFF0077b6),
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF0077b6)
+            containerColor = buttonColor
         ),
         modifier = modifier,
         elevation = ButtonDefaults.buttonElevation(8.dp)

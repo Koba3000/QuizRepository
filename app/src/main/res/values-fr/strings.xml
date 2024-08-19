@@ -39,5 +39,8 @@
     <string name="logout">Déconnexion</string>
     <string name="select_language">Sélectionnez la langue</string>
     <string name="chatGptText">créez une catégorie avec l\'IA !</string>
+    <string name="enter_prompt">" Wprowadź polecenie"</string>
+    <string name="submit">wyślij</string>
+    <string name="cancel">anuluj</string>
 
 </resources>

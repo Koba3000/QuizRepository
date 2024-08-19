@@ -64,6 +64,8 @@ fun LoginScreen(
     val context = LocalContext.current
     val backgroundColor = Color(0xFFcaf0f8) // Replace with your desired background color
 
+    var showWelcomeText by remember { mutableStateOf(false) }
+
     Scaffold(
     ) { paddingValues ->
         Box(
@@ -99,18 +101,8 @@ fun LoginScreen(
                         )
                     }
                 } else {
-                    Text(
-                        text = "Welcome ${user!!.displayName}",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    Button(onClick = {
-                        Firebase.auth.signOut()
-                        user = null
-                    }) {
-                        Text(stringResource(id = R.string.logout))
+                    if (showWelcomeText) {
+                        QuizText(text = "Welcome ${user!!.displayName}", fontSize = FontSizeLarge)
                     }
                 }
             }
