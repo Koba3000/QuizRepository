@@ -17,6 +17,7 @@ import com.example.quiz.screens.settings.SettingsScreen
 import com.example.quiz.screens.start.StartScreen
 import com.example.quiz.screens.login.LoginScreen
 import com.example.quiz.screens.login.LoginViewModel
+import com.example.quiz.screens.register.RegisterScreen
 
 @Composable
 fun Navigation() {
@@ -97,5 +98,13 @@ fun Navigation() {
         ) {
             SettingsScreen(navController = navController)
         }
+
+        composable(
+            route = Screens.RegisterScreen.route
+        ) {
+            RegisterScreen(navController = navController)
+        }
+
+
     }
 }

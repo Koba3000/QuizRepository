@@ -39,6 +39,11 @@
     <string name="logout">Wyloguj</string>
     <string name="select_language">Wybierz język</string>
     <string name="chatGptText">utwórz kategorię za pomocą AI!</string>
+    <string name="or_sign_in_with_google">lub zaloguj się za pomocą Google</string>
+    <string name="sign_in">Zaloguj się za pomocą istniejącego konta</string>
+    <string name="or_create_an_account">" lub stwórz nowe konto!"</string>
+    <string name="register">zarejestruj nowe konto</string>
+    <string name="create_account">Stwórz konto!</string>
 
 
 </resources>

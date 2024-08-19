@@ -39,5 +39,10 @@
     <string name="logout">Déconnexion</string>
     <string name="select_language">Sélectionnez la langue</string>
     <string name="chatGptText">créez une catégorie avec l\'IA !</string>
+    <string name="or_sign_in_with_google">ou connectez-vous avec Google</string>
+    <string name="sign_in">Connectez-vous avec un compte existant</string>
+    <string name="or_create_an_account">" ou créez un nouveau compte !"</string>
+    <string name="register">enregistrez un nouveau compte</string>
+    <string name="create_account">Créez un compte !</string>
 
 </resources>

@@ -85,7 +85,7 @@ fun GoogleButton(
                         .height(16.dp)
                         .width(16.dp),
                     strokeWidth = 2.dp,
-                    color = progressIndicatorColor
+                    color = Color(0xFF0077b6)
                 )
             }
         }

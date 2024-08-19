@@ -40,9 +40,11 @@ import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quiz.ui.theme.FontSizeLarge
+import com.example.quiz.ui.theme.QuizButton
 import com.example.quiz.ui.theme.QuizText
 
 @Composable
@@ -51,6 +53,8 @@ fun LoginScreen(
     navController: NavController
 ) {
     var user by loginViewModel.user
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     val launcher = rememberFirebaseAuthLauncher(
         onAuthComplete = { result ->
             loginViewModel.setUser(result.user)
@@ -72,6 +76,7 @@ fun LoginScreen(
                 .padding(paddingValues)
                 .background(backgroundColor) // Set background color
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,12 +85,34 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 QuizText(text = stringResource(id = R.string.welcome_to_quiz), fontSize = FontSizeLarge)
+                Spacer(modifier = Modifier.height(32.dp))
                 if (user == null) {
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        modifier = Modifier.padding(8.dp)
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        QuizText(text = stringResource(id = R.string.sign_in))
+
+                        TextField(
+                            value = username,
+                            onValueChange = { username = it },
+                            label = { Text("Username") },
+                            placeholder = { Text("Enter your username") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        TextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = { Text("Password") },
+                            placeholder = { Text("Enter your password") },
+                            modifier = Modifier.fillMaxWidth(),
+                            visualTransformation = PasswordVisualTransformation()
+                        )
+
+                        QuizText(text = stringResource(id = R.string.or_sign_in_with_google))
+
                         GoogleButton(
                             onClicked = {
                                 val gso =
@@ -97,20 +124,15 @@ fun LoginScreen(
                                 launcher.launch(googleSignInClient.signInIntent)
                             }
                         )
-                    }
-                } else {
-                    Text(
-                        text = "Welcome ${user!!.displayName}",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    Button(onClick = {
-                        Firebase.auth.signOut()
-                        user = null
-                    }) {
-                        Text(stringResource(id = R.string.logout))
+
+                        QuizText(text = stringResource(id = R.string.or_create_an_account))
+
+                        QuizButton(
+                            text = stringResource(id = R.string.register),
+                            onClick = {
+                                navController.navigate(Screens.RegisterScreen.route)
+                            }
+                        )
                     }
                 }
             }

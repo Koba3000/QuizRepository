@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor() : ViewModel() {
-    var user = mutableStateOf<FirebaseUser?>(Firebase.auth.currentUser)
+    var user = mutableStateOf(Firebase.auth.currentUser)
     private set
 
     fun logout() {
