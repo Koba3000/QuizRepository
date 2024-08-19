@@ -145,7 +145,9 @@ fun CategoryForms(
                     }
 
                     if (isEdit) {
-                        QuizButton(text = stringResource(id = R.string.delete_category),
+                        QuizButton(
+                            text = stringResource(id = R.string.delete_category),
+                            buttonColor = Color(0xFFCE253E),
                             onClick = {
                                 viewModel.deleteCategory(
                                     categoryId.toString(),
@@ -334,7 +336,7 @@ fun QuestionPanel(
         }
         Button(
             onClick = onRemoveQuestion,
-            colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCE253E))
         ) {
             Text("-", color = Color.White)
         }
@@ -383,7 +385,7 @@ fun QuestionPanel(
                         }
                         onQuestionChange(question.copy(name = questionName, answers = answers))
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCE253E))
                 ) {
                     Text("-", color = Color.White)
                 }
